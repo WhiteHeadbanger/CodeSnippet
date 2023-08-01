@@ -11,7 +11,7 @@ if __name__ == '__main__':
         page.window_height = 1080
         page.padding = 0
         page.bgcolor = ft.colors.with_opacity(BODY_OPACITY, WHITE)
-        #page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        page.scroll = "auto"
 
         # NavBar
         navbar = NavBar(width=1920, height=70)
@@ -29,14 +29,14 @@ if __name__ == '__main__':
 
         # Tags
         python_tag = Tag(60, 26, TAG_PURPLE, "Python")
-        javascript_tag = Tag(60, 26, TAG_BLUE, "JavaScript")
+        javascript_tag = Tag(60, 26, TAG_BLUE, "JS")
         c_tag = Tag(60, 26, TAG_LIGHT_BLUE, "C")
         cplusplus_tag = Tag(60, 26, TAG_LIGHT_BLUE_200, "C++")
         go_tag = Tag(60, 26, TAG_PINK, "Go")
         react_tag = Tag(60, 26, TAG_GREEN, "React")
 
         for i in range(12):
-            cards_grid.controls.append(CodeCard(300, 300, "Hello World", "now", "A snippet to create a hello world", python_tag))
+            cards_grid.controls.append(CodeCard(300, 300, "Hello World", "now", "A snippet to create a hello world", [python_tag]))
         
         # Main body
         cards_grid_col = ft.Column(
@@ -52,7 +52,7 @@ if __name__ == '__main__':
             react_tag
         ]
         filters_col = ft.Column(
-            controls=[TagCard(300, 500, "Filter by tags", python_tag, javascript_tag, c_tag, cplusplus_tag, go_tag, react_tag)]
+            controls=[TagCard(300, 500, "Filter by tags", filters_tags)]
         )
 
         main_row = ft.Row(

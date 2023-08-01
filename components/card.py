@@ -9,7 +9,7 @@ from . import (
 
 class Card(ft.UserControl):
 
-    def __init__(self, width, height, title, *tags):
+    def __init__(self, width, height, title, tags):
         super().__init__()
         self.width = width
         self.height = height
@@ -24,7 +24,7 @@ class Card(ft.UserControl):
         )
     
     def build(self):
-        container = ft.Container(
+        self.container = ft.Container(
             bgcolor=ft.colors.with_opacity(CARD_SNIPPET_OPACITY, WHITE),
             width=self.width,
             height=self.height,
@@ -40,16 +40,17 @@ class Card(ft.UserControl):
         )
 
         for tag in self.tags:
-            container.content.controls[1].controls.append(tag)
+            self.container.content.controls[1].controls.append(tag)
         
-        return container
+        return self.container
     
 class CodeCard(Card):
     
-    def __init__(self, width, height, title, date, description, *tags):
-        super().__init__(width, height, title, *tags)
+    def __init__(self, width, height, title, date, description, tags):
+        super().__init__(width, height, title, tags)
         self.date_text = date
         self.description_text = description
+        self.hovered = False
 
         self.date = ft.Text(
             value=self.date_text,
@@ -66,17 +67,41 @@ class CodeCard(Card):
         )
 
     def build(self):
-        container = super().build()
+        self.container = super().build()
+        self.container.scale = ft.transform.Scale(1)
+        self.container.animate_scale=ft.animation.Animation(600, ft.AnimationCurve.BOUNCE_OUT)
+        self.container.on_click = lambda e: self.handle_click(e)
+        self.container.on_hover = lambda e: self.handle_hover(e)
 
-        container.content.controls.append(self.date)
-        container.content.controls.append(self.description)
+        self.container.content.controls.append(self.date)
+        self.container.content.controls.append(self.description)
         
-        return container
+        return self.container
+    
+    def handle_click(self, e):
+        pass
+
+    def handle_hover(self, e):
+        if not self.hovered:
+            self.hovered = True
+            self.animate_hovered()
+            self.update()
+        
+        elif self.hovered:
+            self.hovered = False
+            self.animate_unhovered()
+            self.update()
+    
+    def animate_hovered(self):
+        self.container.scale = 1.1
+    
+    def animate_unhovered(self):
+        self.container.scale = 1
     
 class TagCard(Card):
 
-    def __init__(self, width, height, title, *tags):
-        super().__init__(width, height, title, *tags)
+    def __init__(self, width, height, title, tags):
+        super().__init__(width, height, title, tags)
 
     def build(self):
         container = super().build()
