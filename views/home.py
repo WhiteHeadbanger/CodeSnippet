@@ -32,7 +32,6 @@ class HomeView(ft.UserControl):
         self.content.content.controls[0].controls.append(self.cards_grid())
         self.update()
         
-
     def cards_grid(self):
         cards_grid = ft.GridView(
             runs_count=3,
@@ -50,15 +49,5 @@ class HomeView(ft.UserControl):
 
         return cards_grid
     
-    def get_tags(self):
-        # Tags
-        python_tag = Tag(60, 26, TAG_PURPLE, "Python")
-        javascript_tag = Tag(60, 26, TAG_BLUE, "JS")
-        c_tag = Tag(60, 26, TAG_LIGHT_BLUE, "C")
-        cplusplus_tag = Tag(60, 26, TAG_LIGHT_BLUE_200, "C++")
-        go_tag = Tag(60, 26, TAG_PINK, "Go")
-        react_tag = Tag(60, 26, TAG_GREEN, "React")
-
-        return [python_tag, javascript_tag, c_tag, cplusplus_tag, go_tag, react_tag]
 
         
