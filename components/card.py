@@ -48,6 +48,13 @@ class Card(ft.UserControl):
     def add_tag(self, tag):
         self.tag_row.controls.append(tag)
         self.update()
+
+    def get_tags(self):
+        return self.tag_row.controls
+    
+    def clear_tags(self):
+        self.tag_row.controls.clear()
+        self.update()
     
 class CodeCard(Card):
     
@@ -120,4 +127,3 @@ class TagCard(Card):
 
     def go_newtag(self, e):
         self.route.page.go('/newtag')
-        #self.route.page.update()

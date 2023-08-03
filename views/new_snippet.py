@@ -49,7 +49,8 @@ class NewSnippetView(ft.UserControl):
                             self.tags_card,
                             ft.TextButton(text="Save", on_click=self.save_snippet),
                         ]
-                    )
+                    ),
+                    ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)
                 ]
             )
         )
@@ -57,10 +58,16 @@ class NewSnippetView(ft.UserControl):
         return self.content
     
     def initialize(self):
+        self.content.content.controls[1].controls[0].clear_tags()
+        for tag in self.route.home.tag_card.get_tags():
+            self.content.content.controls[1].controls[0].add_tag(tag)
         self.update()
 
     def save_snippet(self, e):
         pass
+
+    def go_home(self, e):
+        self.route.page.go('/home')
 
     
 
