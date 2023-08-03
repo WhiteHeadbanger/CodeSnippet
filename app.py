@@ -1,6 +1,6 @@
 import flet as ft
 from components import NavBar
-from views import HomeView, NewTagView
+from views import HomeView, NewTagView, NewSnippetView
 
 class App:
 
@@ -8,22 +8,25 @@ class App:
         self.page = page
 
         # Creates the navbar
-        self.navbar = NavBar(width=1920, height=70)
+        self.navbar = NavBar(self, width=1920, height=70)
 
         # Instances of views. Passing self as a parameter to facilitate communication between all views
         self.home = HomeView(self)
         self.new_tag = NewTagView(self)
+        self.new_snippet = NewSnippetView(self)
 
         # Creates dict of routes
         self.routes = {
             '/home': self.home,
-            '/newtag': self.new_tag
+            '/newtag': self.new_tag,
+            '/newsnippet': self.new_snippet
         }
 
         # Creates dict of methods to initialize the views
         self.calls = {
             '/home': self.home.initialize,
-            '/newtag': self.new_tag.initialize
+            '/newtag': self.new_tag.initialize,
+            '/newsnippet': self.new_snippet.initialize,
         }
 
         # App body
