@@ -1,11 +1,6 @@
-from flet import View
-from components import NavBar
+from .home import HomeView
+from .new_tag import NewTagView
 
-class BaseView(View):
 
-    def __init__(self, page, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.navbar = NavBar(1920, 70)
-        self.page = page
         
 

@@ -9,8 +9,9 @@ from . import (
 
 class Card(ft.UserControl):
 
-    def __init__(self, width, height, title, tags = None):
+    def __init__(self, route, width, height, title, tags = None):
         super().__init__()
+        self.route = route
         self.width = width
         self.height = height
         self.title_text = title
@@ -50,8 +51,8 @@ class Card(ft.UserControl):
     
 class CodeCard(Card):
     
-    def __init__(self, width, height, title, date, description, tags = None):
-        super().__init__(width, height, title, tags)
+    def __init__(self, route, width, height, title, date, description, tags = None):
+        super().__init__(route, width, height, title, tags)
         self.date_text = date
         self.description_text = description
         self.hovered = False
@@ -104,15 +105,19 @@ class CodeCard(Card):
     
 class TagCard(Card):
 
-    def __init__(self, width, height, title, tags = None):
-        super().__init__(width, height, title, tags)
+    def __init__(self, route, width, height, title, tags = None):
+        super().__init__(route, width, height, title, tags)
 
     def build(self):
         self.container = super().build()
 
         new_tag_button = ft.TextButton(
             text="New tag",
-            on_click=lambda e: e.page.go('/newtag')
+            on_click=lambda e: self.route.page.go('/newtag')
         )
         self.container.content.controls.append(new_tag_button)
         return self.container
+    
+    def add_tag(self, tag):
+        self.container.content.controls[1].controls.append(tag)
+        self.update()

@@ -1,9 +1,9 @@
 import flet as ft
 from components import BODY_OPACITY, WHITE
-from views.home import _home_view_
-from views.new_tag import _newtag_view_
+""" from views.home import _home_view_
+from views.new_tag import _newtag_view_ """
+from app import App
 
-#TODO '/newtag', '/snippet', '/newsnippet'
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -20,29 +20,36 @@ if __name__ == '__main__':
         page.bgcolor = ft.colors.with_opacity(BODY_OPACITY, WHITE)
         page.scroll = "auto"
 
-        home = _home_view_(page)
-        new_tag = _newtag_view_(page)
+        _app = App(page)
+        page.on_route_change = _app.route_change
 
-        def route_change(route):
+        #home = _home_view_(page)
+        #new_tag = _newtag_view_(page)
+
+        """ def route_change(route):
             page.views.clear()
             if page.route == '/newtag':
                 page.views.append(new_tag)
             elif page.route == '/home':
                 page.views.append(home)
+                home.update(page)
 
             page.update()
 
         def view_pop(view):
             page.views.pop()
             top_view = page.views[-1]
-            page.go(top_view.route)
+            page.go(top_view.route) """
 
-        page.on_route_change = route_change
+        """ page.on_route_change = route_change
         page.on_view_pop = view_pop
-        page.go(page.route)
+        page.go(page.route) """
 
-        page.views.append(home)
+        #page.views.append(home)
+
+        page.add(_app.body)
         
+        page.go('/home')
         page.update()
 
     ft.app(target=main)
