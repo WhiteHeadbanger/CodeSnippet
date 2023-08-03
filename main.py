@@ -1,6 +1,13 @@
 import flet as ft
-from components import BODY_OPACITY, WHITE, TAG_PURPLE, TAG_PINK, TAG_BLUE, TAG_LIGHT_BLUE, TAG_LIGHT_BLUE_200, TAG_GREEN
-from components import NavBar, Tag, CodeCard, TagCard
+from components import BODY_OPACITY, WHITE
+from views.home import _home_view_
+from views.new_tag import _newtag_view_
+
+#TODO '/newtag', '/snippet', '/newsnippet'
+
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("flet_core").setLevel(logging.INFO)
 
 if __name__ == '__main__':
     
@@ -13,66 +20,28 @@ if __name__ == '__main__':
         page.bgcolor = ft.colors.with_opacity(BODY_OPACITY, WHITE)
         page.scroll = "auto"
 
-        # NavBar
-        navbar = NavBar(width=1920, height=70)
-        page.add(navbar)
+        home = _home_view_(page)
+        new_tag = _newtag_view_(page)
 
-        # Grid
-        cards_grid = ft.GridView(
-            runs_count=3,
-            max_extent=300,
-            child_aspect_ratio=1.0,
-            spacing=40,
-            run_spacing=40,
-            width=1000
-        )
+        def route_change(route):
+            page.views.clear()
+            if page.route == '/newtag':
+                page.views.append(new_tag)
+            elif page.route == '/home':
+                page.views.append(home)
 
-        # Tags
-        python_tag = Tag(60, 26, TAG_PURPLE, "Python")
-        javascript_tag = Tag(60, 26, TAG_BLUE, "JS")
-        c_tag = Tag(60, 26, TAG_LIGHT_BLUE, "C")
-        cplusplus_tag = Tag(60, 26, TAG_LIGHT_BLUE_200, "C++")
-        go_tag = Tag(60, 26, TAG_PINK, "Go")
-        react_tag = Tag(60, 26, TAG_GREEN, "React")
+            page.update()
 
-        for i in range(12):
-            cards_grid.controls.append(CodeCard(300, 300, "Hello World", "now", "A snippet to create a hello world", [python_tag]))
-        
-        # Main body
-        cards_grid_col = ft.Column(
-            controls=[cards_grid]
-        )
+        def view_pop(view):
+            page.views.pop()
+            top_view = page.views[-1]
+            page.go(top_view.route)
 
-        filters_tags = [
-            python_tag,
-            javascript_tag,
-            c_tag,
-            cplusplus_tag,
-            go_tag,
-            react_tag
-        ]
-        filters_col = ft.Column(
-            controls=[TagCard(300, 500, "Filter by tags", filters_tags)]
-        )
+        page.on_route_change = route_change
+        page.on_view_pop = view_pop
+        page.go(page.route)
 
-        main_row = ft.Row(
-            vertical_alignment=ft.CrossAxisAlignment.START,
-            spacing=40,
-            controls=[
-                cards_grid_col,
-                filters_col
-            ]
-        )
-
-        main_container = ft.Container(
-            #bgcolor=ft.colors.RED_900,
-            margin=ft.margin.only(top=100, left=270),
-            content=main_row
-                        
-        )
-        
-
-        page.add(main_container)
+        page.views.append(home)
         
         page.update()
 

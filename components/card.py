@@ -9,12 +9,12 @@ from . import (
 
 class Card(ft.UserControl):
 
-    def __init__(self, width, height, title, tags):
+    def __init__(self, width, height, title, tags = None):
         super().__init__()
         self.width = width
         self.height = height
         self.title_text = title
-        self.tags = [tag for tag in tags]
+        self.tags = [tag for tag in tags] if tags is not None else []
 
         self.title = ft.Text(
             value=self.title_text,
@@ -44,9 +44,13 @@ class Card(ft.UserControl):
         
         return self.container
     
+    def add_tag(self, tag):
+        self.container.content.controls[1].controls.append(tag)
+        self.update()
+    
 class CodeCard(Card):
     
-    def __init__(self, width, height, title, date, description, tags):
+    def __init__(self, width, height, title, date, description, tags = None):
         super().__init__(width, height, title, tags)
         self.date_text = date
         self.description_text = description
@@ -79,7 +83,7 @@ class CodeCard(Card):
         return self.container
     
     def handle_click(self, e):
-        pass
+        e.page.go('/snippet')
 
     def handle_hover(self, e):
         if not self.hovered:
@@ -100,14 +104,15 @@ class CodeCard(Card):
     
 class TagCard(Card):
 
-    def __init__(self, width, height, title, tags):
+    def __init__(self, width, height, title, tags = None):
         super().__init__(width, height, title, tags)
 
     def build(self):
-        container = super().build()
+        self.container = super().build()
 
         new_tag_button = ft.TextButton(
-            text="New tag"
+            text="New tag",
+            on_click=lambda e: e.page.go('/newtag')
         )
-        container.content.controls.append(new_tag_button)
-        return container
+        self.container.content.controls.append(new_tag_button)
+        return self.container
