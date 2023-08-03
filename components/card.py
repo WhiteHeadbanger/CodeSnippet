@@ -23,6 +23,8 @@ class Card(ft.UserControl):
             weight=ft.FontWeight.BOLD,
             color=ft.colors.with_opacity(CARD_SNIPPET_TITLE_OPACITY, WHITE)
         )
+
+        self.tag_row = ft.Row(wrap=True)
     
     def build(self):
         self.container = ft.Container(
@@ -33,9 +35,7 @@ class Card(ft.UserControl):
             content=ft.Column(
                 controls=[
                     self.title,
-                    ft.Row(
-                        wrap=True
-                    )
+                    self.tag_row
                 ]
             )
         )
@@ -46,7 +46,7 @@ class Card(ft.UserControl):
         return self.container
     
     def add_tag(self, tag):
-        self.container.content.controls[1].controls.append(tag)
+        self.tag_row.controls.append(tag)
         self.update()
     
 class CodeCard(Card):
@@ -75,7 +75,7 @@ class CodeCard(Card):
         self.container = super().build()
         self.container.scale = ft.transform.Scale(1)
         self.container.animate_scale=ft.animation.Animation(600, ft.AnimationCurve.BOUNCE_OUT)
-        self.container.on_click = lambda e: self.handle_click(e)
+        #self.container.on_click = lambda e: self.handle_click(e)
         self.container.on_hover = lambda e: self.handle_hover(e)
 
         self.container.content.controls.append(self.date)
@@ -113,11 +113,11 @@ class TagCard(Card):
 
         new_tag_button = ft.TextButton(
             text="New tag",
-            on_click=lambda e: self.route.page.go('/newtag')
+            on_click=self.go_newtag
         )
         self.container.content.controls.append(new_tag_button)
         return self.container
-    
-    def add_tag(self, tag):
-        self.container.content.controls[1].controls.append(tag)
-        self.update()
+
+    def go_newtag(self, e):
+        self.route.page.go('/newtag')
+        #self.route.page.update()

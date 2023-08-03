@@ -8,6 +8,8 @@ class HomeView(ft.UserControl):
     def __init__(self, route):
         super().__init__()
         self.route = route
+        
+        self.tag_card = TagCard(self.route, 300, 500, "Filter by tags")
 
     def build(self):
         self.content = ft.Container(
@@ -16,11 +18,9 @@ class HomeView(ft.UserControl):
                 vertical_alignment=ft.CrossAxisAlignment.START,
                 spacing=40,
                 controls=[
+                    ft.Column(),
                     ft.Column(
-                        controls=[]
-                    ),
-                    ft.Column(
-                        controls=[]
+                        controls=[self.tag_card]
                     )
                 ]
             )
@@ -30,8 +30,8 @@ class HomeView(ft.UserControl):
 
     def initialize(self):
         self.content.content.controls[0].controls.append(self.cards_grid())
-        self.content.content.controls[1].controls.append(TagCard(self.route, 300, 500, "Filter by tags"))
         self.update()
+        
 
     def cards_grid(self):
         cards_grid = ft.GridView(

@@ -23,7 +23,7 @@ class App:
         # Creates dict of methods to initialize the views
         self.calls = {
             '/home': self.home.initialize,
-            '/newtag': self.home.initialize
+            '/newtag': self.new_tag.initialize
         }
 
         # App body

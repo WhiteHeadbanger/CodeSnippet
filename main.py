@@ -23,30 +23,6 @@ if __name__ == '__main__':
         _app = App(page)
         page.on_route_change = _app.route_change
 
-        #home = _home_view_(page)
-        #new_tag = _newtag_view_(page)
-
-        """ def route_change(route):
-            page.views.clear()
-            if page.route == '/newtag':
-                page.views.append(new_tag)
-            elif page.route == '/home':
-                page.views.append(home)
-                home.update(page)
-
-            page.update()
-
-        def view_pop(view):
-            page.views.pop()
-            top_view = page.views[-1]
-            page.go(top_view.route) """
-
-        """ page.on_route_change = route_change
-        page.on_view_pop = view_pop
-        page.go(page.route) """
-
-        #page.views.append(home)
-
         page.add(_app.body)
         
         page.go('/home')

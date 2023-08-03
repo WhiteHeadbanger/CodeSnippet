@@ -8,6 +8,7 @@ class NewTagView(ft.UserControl):
     def __init__(self, route):
         super().__init__()
         self.route = route
+        self.initialized = False
         self.colors = {
             'Purple': TAG_PURPLE,
             'Pink': TAG_PINK,
@@ -44,20 +45,23 @@ class NewTagView(ft.UserControl):
             content=ft.Column(
                 controls=[
                     ft.Row(
-                        controls=[ft.IconButton(icon=ft.icons.CLOSE, on_click=lambda e: self.close_view(e))],
+                        controls=[ft.IconButton(icon=ft.icons.CLOSE, on_click=self.close_view)],
                         alignment=ft.MainAxisAlignment.END
                     ),
                     self.name_field,
                     self.color_dropdown,
                     ft.TextButton(
                         text="Save",
-                        on_click=lambda e: self.save_tag(e)
+                        on_click=self.save_tag
                     )
                 ]
             )
         )
 
         return self.content
+    
+    def initialize(self):
+        pass
 
     def save_tag(self, e):
         self.route.page.go('/home')
