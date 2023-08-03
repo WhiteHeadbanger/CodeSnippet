@@ -1,6 +1,6 @@
 import flet as ft
 
-from components import TAG_PURPLE, TAG_PINK, TAG_BLUE, TAG_LIGHT_BLUE, TAG_LIGHT_BLUE_200, TAG_GREEN
+from components import TAG_PURPLE
 from components import Tag, CodeCard, TagCard
 
 class HomeView(ft.UserControl):
