@@ -1,5 +1,5 @@
 import flet as ft
-from components import NavBar
+from components import NavBar, CodeEditor
 from views import HomeView, NewTagView, NewSnippetView
 
 class App:
@@ -14,6 +14,9 @@ class App:
         self.home = HomeView(self)
         self.new_tag = NewTagView(self)
         self.new_snippet = NewSnippetView(self)
+        
+        #TODO Make new view of new_snippet, like new_tag
+        #self.code_editor = CodeEditor(self)
 
         # Creates dict of routes
         self.routes = {

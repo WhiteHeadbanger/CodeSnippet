@@ -1,5 +1,5 @@
 import flet as ft
-from components import TagCard
+from components import TagCard, CodeEditor
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY
 
 class NewSnippetView(ft.UserControl):
@@ -8,6 +8,7 @@ class NewSnippetView(ft.UserControl):
         super().__init__()
         self.route = route
 
+        self.code_editor = CodeEditor(self.route)
         self.tags_card = TagCard(self.route, 300, 500, "Your tags")
 
     def build(self):
@@ -35,13 +36,14 @@ class NewSnippetView(ft.UserControl):
                                 bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
                                 color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
                             ),
-                            ft.TextField(
-                                bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
-                                color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
-                                height=800,
-                                multiline=True,
-                                dense=False
-                            )
+                            #ft.TextField(
+                            #    bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
+                            #    color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
+                            #    height=800,
+                            #    multiline=True,
+                            #    dense=False
+                            #),
+                            self.code_editor
                         ]
                     ),
                     ft.Column(
@@ -61,6 +63,13 @@ class NewSnippetView(ft.UserControl):
         self.content.content.controls[1].controls[0].clear_tags()
         for tag in self.route.home.tag_card.get_tags():
             self.content.content.controls[1].controls[0].add_tag(tag)
+        
+        """ self.code_editor.clear_line_numbers()
+        for number, _ in enumerate(self.code_editor.get_line_number_col(), start=1):
+            self.route.new_snippet.content.content.controls[0].controls[3].new_line(ft.Text(str(number)))
+        else:
+            self.route.new_snippet.content.content.controls[0].controls[3].new_line(ft.Text(str(self.line_counter))) """
+        
         self.update()
 
     def save_snippet(self, e):
@@ -68,6 +77,5 @@ class NewSnippetView(ft.UserControl):
 
     def go_home(self, e):
         self.route.page.go('/home')
-
     
 
