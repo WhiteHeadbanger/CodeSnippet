@@ -69,13 +69,17 @@ class NewSnippetView(ft.UserControl):
         self.route.page.go('/home')
 
     def add_tag(self, tag):
-        if tag in self.snippet_tags.content.controls:
-            self.snippet_tags.content.controls.remove(tag)
-            self.update()
-            return
+        for _tag in self.snippet_tags.content.controls:
+            if _tag.color == tag.color and _tag.text == tag.text:
+                self.delete_tag(_tag)
+                return
         
-        t = Tag(self.route, 60, 26, tag.bgcolor, tag.content.value, 'new_tag')
+        t = Tag(self.route, 60, 26, tag.color, tag.text, 'selected_tag')
         self.snippet_tags.content.controls.append(t)
+        self.update()
+
+    def delete_tag(self, tag):
+        self.snippet_tags.content.controls.remove(tag)
         self.update()
     
 

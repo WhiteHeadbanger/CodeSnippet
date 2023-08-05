@@ -36,4 +36,6 @@ class Tag(ft.UserControl):
         if self.section == 'home':
             pass
         elif self.section == 'new_tag':
-            self.route.new_snippet.add_tag(self.content)
+            self.route.new_snippet.add_tag(self)
+        elif self.section == 'selected_tag':
+            self.route.new_snippet.delete_tag(self)
