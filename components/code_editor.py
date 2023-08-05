@@ -6,24 +6,20 @@ from . import (
 
 class CodeEditor(ft.UserControl):
 
-    def __init__(self, route):
+    def __init__(self, route, width):
         super().__init__()
         self.route = route
-        
-        self.line_counter = 1
-
-        self.prefix_control = ft.ListView([ft.Text("1")])
+        self.width = width
 
         self.text_field = ft.TextField(
             bgcolor=ft.colors.with_opacity(CARD_SNIPPET_OPACITY, WHITE),
-            width=500,
             color=WHITE,
             multiline=True,
             dense=False,
             on_change=self.handle_on_change,
             expand=True,
             #prefix=self.prefix_control,
-            prefix_text=str(self.line_counter),
+            prefix_text=str("1"),
             content_padding=5
         )
 
@@ -32,7 +28,8 @@ class CodeEditor(ft.UserControl):
             content=ft.Row(
                 alignment=ft.MainAxisAlignment.START,
                 vertical_alignment=ft.CrossAxisAlignment.START,
-                controls=[self.text_field]
+                controls=[self.text_field],
+                expand=True
             )
         )
 
