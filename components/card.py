@@ -58,10 +58,11 @@ class Card(ft.UserControl):
     
 class CodeCard(Card):
     
-    def __init__(self, route, width, height, title, date, description, tags = None):
+    def __init__(self, route, width, height, title, date, description, tags = None, code = None):
         super().__init__(route, width, height, title, tags)
         self.date_text = date
         self.description_text = description
+        self.code = code
         self.hovered = False
 
         self.date = ft.Text(

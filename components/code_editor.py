@@ -6,10 +6,9 @@ from . import (
 
 class CodeEditor(ft.UserControl):
 
-    def __init__(self, route, width):
+    def __init__(self, route):
         super().__init__()
         self.route = route
-        self.width = width
 
         self.text_field = ft.TextField(
             bgcolor=ft.colors.with_opacity(CARD_SNIPPET_OPACITY, WHITE),

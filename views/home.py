@@ -10,6 +10,14 @@ class HomeView(ft.UserControl):
         self.route = route
         
         self.tag_card = TagCard(self.route, 300, 500, "Filter by tags")
+        self.card_grid = ft.GridView(
+            runs_count=3,
+            max_extent=300,
+            child_aspect_ratio=1.0,
+            spacing=40,
+            run_spacing=40,
+            width=1000
+        )
 
     def build(self):
         self.content = ft.Container(
@@ -18,7 +26,9 @@ class HomeView(ft.UserControl):
                 vertical_alignment=ft.CrossAxisAlignment.START,
                 spacing=40,
                 controls=[
-                    ft.Column(),
+                    ft.Column(
+                        controls=[self.card_grid]
+                    ),
                     ft.Column(
                         controls=[self.tag_card]
                     )
@@ -29,25 +39,17 @@ class HomeView(ft.UserControl):
         return self.content
 
     def initialize(self):
-        self.content.content.controls[0].controls.append(self.cards_grid())
+        self.snippets_data = self.route.config.read_data()
+        self.cards_grid()
         self.update()
         
     def cards_grid(self):
-        cards_grid = ft.GridView(
-            runs_count=3,
-            max_extent=300,
-            child_aspect_ratio=1.0,
-            spacing=40,
-            run_spacing=40,
-            width=1000
-        )
+        for snip in self.snippets_data:
+            tags = [Tag(60, 26, tag['color'], tag['text']) for tag in snip['tags']]
 
-        python_tag = Tag(60, 26, TAG_PURPLE, "Python")
-
-        for i in range(12):
-            cards_grid.controls.append(CodeCard(self.route, 300, 300, "Hello World", "now", "A snippet to create a hello world", [python_tag]))
-
-        return cards_grid
+            self.card_grid.controls.append(CodeCard(self.route, 300, 300, snip['title'], snip['date'], snip['description'], tags, snip['code']))
     
+    def add_new_snippet(self):
 
-        
+
+        pass
