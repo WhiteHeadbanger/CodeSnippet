@@ -48,7 +48,7 @@ class HomeView(ft.UserControl):
         for snip in snippets_data:
             tags = [Tag(self.route, 60, 26, tag['color'], tag['text'], section="home") for tag in snip['tags']]
 
-            self.card_grid.controls.append(CodeCard(self.route, 300, 300, snip['title'], snip['date'], snip['description'], tags, snip['code']))
+            self.card_grid.controls.append(CodeCard(snip['id'], self.route, 300, 300, snip['title'], snip['date'], snip['description'], tags, snip['code']))
     
     def add_new_snippet(self):
 

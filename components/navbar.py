@@ -26,11 +26,14 @@ class NavBar(ft.UserControl):
                 alignment=ft.MainAxisAlignment.SPACE_EVENLY,
                 spacing=50,
                 controls=[
-                    ft.Text(
-                        value="Code Snippet", 
-                        color=NAVBAR_LOGO,
-                        size=20,
-                        weight=ft.FontWeight.BOLD,
+                    ft.Container(
+                        on_click=self.go_home,
+                        content=ft.Text(
+                            value="Code Snippet", 
+                            color=NAVBAR_LOGO,
+                            size=20,
+                            weight=ft.FontWeight.BOLD,
+                        )
                     ),
                     ft.TextField(
                         width=600,
@@ -51,4 +54,7 @@ class NavBar(ft.UserControl):
     
     def go_newsnippet(self, e):
         self.route.page.go('/newsnippet')
+
+    def go_home(self, e):
+        self.route.page.go('/home')
     

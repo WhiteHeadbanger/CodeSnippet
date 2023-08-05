@@ -1,6 +1,7 @@
 import flet as ft
 from components import TagCard, CodeEditor, Tag
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY
+from uuid import uuid4
 
 class NewSnippetView(ft.UserControl):
     
@@ -67,11 +68,13 @@ class NewSnippetView(ft.UserControl):
 
     def save_snippet(self, e):
         existing_data = self.route.config.read_data()
+        id = str(uuid4())
         title = self.title.value
         description = self.description.value
         tags = [{"text":tag.text, "color":tag.color} for tag in self.snippet_tags.content.controls]
         code = self.code_editor.text_field.value
         data = {
+            'id': id,
             'title': title,
             'description': description,
             'tags': tags,

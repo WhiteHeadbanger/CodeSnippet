@@ -1,6 +1,6 @@
 import flet as ft
 from components import NavBar
-from views import HomeView, NewTagView, NewSnippetView
+from views import HomeView, NewTagView, NewSnippetView, SnippetView
 from config import Config
 
 class App:
@@ -15,6 +15,7 @@ class App:
         self.home = HomeView(self)
         self.new_tag = NewTagView(self)
         self.new_snippet = NewSnippetView(self)
+        self.snippet = SnippetView(self)
         
         self.config = Config(self)
 
@@ -22,7 +23,8 @@ class App:
         self.routes = {
             '/home': self.home,
             '/newtag': self.new_tag,
-            '/newsnippet': self.new_snippet
+            '/newsnippet': self.new_snippet,
+            '/snippet': self.snippet
         }
 
         # Creates dict of methods to initialize the views
@@ -30,6 +32,7 @@ class App:
             '/home': self.home.initialize,
             '/newtag': self.new_tag.initialize,
             '/newsnippet': self.new_snippet.initialize,
+            '/snippet': self.snippet.initialize
         }
 
         # App body

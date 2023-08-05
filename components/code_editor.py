@@ -17,8 +17,7 @@ class CodeEditor(ft.UserControl):
             dense=False,
             on_change=self.handle_on_change,
             expand=True,
-            #prefix=self.prefix_control,
-            prefix_text=str("1"),
+            prefix_text="1 ",
             content_padding=5
         )
 
@@ -37,14 +36,13 @@ class CodeEditor(ft.UserControl):
     def handle_on_change(self, e):
         count_new_lines = self.text_field.value.count("\n")
         
-        self.text_field.prefix_text = "1"
+        self.text_field.prefix_text = "1 "
         if count_new_lines == 0:
             self.update()
             return
         
-        self.text_field.prefix_text = "1"
         for i in range(1, count_new_lines):
-            self.text_field.prefix_text += f'\n{i+1}'
-        self.text_field.prefix_text += f'\n{count_new_lines+1}'
+            self.text_field.prefix_text += f'\n{i+1} '
+        self.text_field.prefix_text += f'\n{count_new_lines+1} '
 
         self.update()
