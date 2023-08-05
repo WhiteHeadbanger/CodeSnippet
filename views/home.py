@@ -39,12 +39,13 @@ class HomeView(ft.UserControl):
         return self.content
 
     def initialize(self):
-        self.snippets_data = self.route.config.read_data()
+        self.card_grid.controls.clear()
         self.cards_grid()
         self.update()
         
     def cards_grid(self):
-        for snip in self.snippets_data:
+        snippets_data = self.route.config.read_data()
+        for snip in snippets_data:
             tags = [Tag(self.route, 60, 26, tag['color'], tag['text'], section="home") for tag in snip['tags']]
 
             self.card_grid.controls.append(CodeCard(self.route, 300, 300, snip['title'], snip['date'], snip['description'], tags, snip['code']))

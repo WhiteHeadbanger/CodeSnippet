@@ -14,4 +14,4 @@ class Config:
 
     def save_data(self, data):
         with open(self.snippets_dir, "w") as file:
-            json.dump(data)
+            json.dump(data, file)

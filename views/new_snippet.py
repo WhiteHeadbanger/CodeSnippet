@@ -15,6 +15,17 @@ class NewSnippetView(ft.UserControl):
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             height=30,
         )
+        self.title = ft.TextField(
+            hint_text="Title",
+            bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
+            color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
+        )
+        self.description = ft.TextField(
+            hint_text="Description",
+            bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
+            color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
+        )
+
 
     def build(self):
         self.content = ft.Container(
@@ -26,16 +37,8 @@ class NewSnippetView(ft.UserControl):
                     ft.Column(
                         width=1000,
                         controls=[
-                            ft.TextField(
-                                hint_text="Title",
-                                bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
-                                color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
-                            ),
-                            ft.TextField(
-                                hint_text="Description",
-                                bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
-                                color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
-                            ),
+                            self.title,
+                            self.description,
                             ft.Text("Selected tags:"),
                             self.snippet_tags,
                             self.code_editor
@@ -63,7 +66,23 @@ class NewSnippetView(ft.UserControl):
         self.update()
 
     def save_snippet(self, e):
-        pass
+        existing_data = self.route.config.read_data()
+        title = self.title.value
+        description = self.description.value
+        tags = [{"text":tag.text, "color":tag.color} for tag in self.snippet_tags.content.controls]
+        code = self.code_editor.text_field.value
+        data = {
+            'title': title,
+            'description': description,
+            'tags': tags,
+            'date': 'now',
+            'code': code
+        }
+        existing_data.append(data)
+
+        self.route.config.save_data(existing_data)
+        self.route.page.go('/home')
+        self.route.page.update()
 
     def go_home(self, e):
         self.route.page.go('/home')
