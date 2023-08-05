@@ -81,6 +81,13 @@ class CodeCard(Card):
             color=ft.colors.with_opacity(CARD_SNIPPET_DESCRIPTION_OPACITY, WHITE)
         )
 
+        self.edit_button = ft.IconButton(
+            icon=ft.icons.EDIT,
+            on_click=self.go_edit_snippet,
+            visible=False,
+            icon_size=17
+        )
+
     def build(self):
         self.container = super().build()
         self.container.scale = ft.transform.Scale(1)
@@ -88,6 +95,11 @@ class CodeCard(Card):
         self.container.on_click = self.handle_click
         self.container.on_hover = lambda e: self.handle_hover(e)
 
+        self.container.content.controls.remove(self.title)
+        self.container.content.controls.insert(0, (ft.Row(
+            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+            controls=[self.title, self.edit_button]
+        )))
         self.container.content.controls.append(self.date)
         self.container.content.controls.append(self.description)
         
@@ -110,9 +122,15 @@ class CodeCard(Card):
     
     def animate_hovered(self):
         self.container.scale = 1.1
+        self.edit_button.visible = True
     
     def animate_unhovered(self):
         self.container.scale = 1
+        self.edit_button.visible = False
+
+    def go_edit_snippet(self, e):
+        self.route.edit_snippet.snippet_id = self.id
+        self.route.page.go('/editsnippet')
     
 class TagCard(Card):
 
