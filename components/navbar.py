@@ -11,8 +11,9 @@ from . import (
 
 class NavBar(ft.UserControl):
 
-    def __init__(self, width, height):
+    def __init__(self, route, width, height):
         super().__init__()
+        self.route = route
         self.width = width
         self.height = height
 
@@ -41,9 +42,13 @@ class NavBar(ft.UserControl):
                     ft.ElevatedButton(
                         text="New", 
                         bgcolor=ft.colors.with_opacity(NAVBAR_NEW_BACKGROUND_OPACITY, WHITE), 
-                        color=ft.colors.with_opacity(NAVBAR_NEW_TEXT_OPACITY, WHITE)
+                        color=ft.colors.with_opacity(NAVBAR_NEW_TEXT_OPACITY, WHITE),
+                        on_click=self.go_newsnippet
                     )
                 ]
             )
         )
+    
+    def go_newsnippet(self, e):
+        self.route.page.go('/newsnippet')
     

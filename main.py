@@ -1,6 +1,13 @@
 import flet as ft
-from components import BODY_OPACITY, WHITE, TAG_PURPLE
-from components import NavBar, Tag, CodeCard
+from components import BODY_OPACITY, WHITE
+""" from views.home import _home_view_
+from views.new_tag import _newtag_view_ """
+from app import App
+
+
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("flet_core").setLevel(logging.INFO)
 
 if __name__ == '__main__':
     
@@ -11,48 +18,14 @@ if __name__ == '__main__':
         page.window_height = 1080
         page.padding = 0
         page.bgcolor = ft.colors.with_opacity(BODY_OPACITY, WHITE)
-        page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-        page.vertical_alignment = ft.MainAxisAlignment.CENTER
+        page.scroll = "auto"
 
-        # NavBar
-        navbar = NavBar(width=1920, height=70)
-        page.add(navbar)
+        _app = App(page)
+        page.on_route_change = _app.route_change
 
-        # Grid
-        cards_grid = ft.GridView(
-            expand=True,
-            runs_count=3,
-            max_extent=300,
-            child_aspect_ratio=1.0,
-            spacing=40,
-            run_spacing=40,
-            width=1000
-        )
-
-        # Tags
-        python_tag = Tag(60, 26, TAG_PURPLE, "Python")
-
-        for i in range(6):
-            cards_grid.controls.append(CodeCard(300, 300, "Hello World", "now", "A snippet to create a hello world", python_tag))
+        page.add(_app.body)
         
-        """ cards_grid_col = ft.Column(
-            controls=[cards_grid]
-        )
-
-        filters_col = ft.Column(
-            controls=[CodeCard(300, 300, "Hello World", "now", "A snippet to create a hello world", python_tag)]
-        )
-
-        main_row = ft.Row(
-            controls=[
-                cards_grid_col,
-                filters_col
-            ]
-        )
-
-        page.add(main_row) """
-        page.add(cards_grid)
-        
+        page.go('/home')
         page.update()
 
     ft.app(target=main)
