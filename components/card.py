@@ -59,8 +59,9 @@ class Card(ft.UserControl):
     
 class CodeCard(Card):
     
-    def __init__(self, route, width, height, title, date, description, tags = None, code = None):
+    def __init__(self, id, route, width, height, title, date, description, tags = None, code = None):
         super().__init__(route, width, height, title, tags)
+        self.id = id
         self.date_text = date
         self.description_text = description
         self.code = code
@@ -84,7 +85,7 @@ class CodeCard(Card):
         self.container = super().build()
         self.container.scale = ft.transform.Scale(1)
         self.container.animate_scale=ft.animation.Animation(600, ft.AnimationCurve.BOUNCE_OUT)
-        #self.container.on_click = lambda e: self.handle_click(e)
+        self.container.on_click = self.handle_click
         self.container.on_hover = lambda e: self.handle_hover(e)
 
         self.container.content.controls.append(self.date)
@@ -93,7 +94,8 @@ class CodeCard(Card):
         return self.container
     
     def handle_click(self, e):
-        e.page.go('/snippet')
+        self.route.snippet.snippet_id = self.id
+        self.route.page.go('/snippet')
 
     def handle_hover(self, e):
         if not self.hovered:
