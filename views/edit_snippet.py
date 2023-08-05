@@ -62,7 +62,7 @@ class EditSnippetView(ft.UserControl):
         
         self.tags_card.clear_tags()
         for tag in self.route.home.tag_card.get_tags():
-            t = Tag(self.route, 60, 26, tag.color, tag.text, 'new_tag')
+            t = Tag(self.route, 60, 26, tag.color, tag.text, 'edit_new_tag')
             self.tags_card.add_tag(t)
         
         existing_data = self.route.config.read_data()
@@ -73,7 +73,7 @@ class EditSnippetView(ft.UserControl):
         
         self.title.value = snippet['title']
         self.description.value = snippet['description']
-        tags = [Tag(self.route, 60, 26, tag['color'], tag['text'], 'selected_tag') for tag in snippet['tags']]
+        tags = [Tag(self.route, 60, 26, tag['color'], tag['text'], 'edit_selected_tag') for tag in snippet['tags']]
         self.snippet_tags.content.controls = tags
         self.code_editor.text_field.value = snippet['code']
         self.code_editor.handle_on_change(None)
@@ -106,6 +106,20 @@ class EditSnippetView(ft.UserControl):
         self.route.config.save_data(existing_data)
         self.route.page.go('/home')
         self.route.page.update()
+
+    def add_tag(self, tag):
+        for _tag in self.snippet_tags.content.controls:
+            if _tag.color == tag.color and _tag.text == tag.text:
+                self.delete_tag(_tag)
+                return
+        
+        t = Tag(self.route, 60, 26, tag.color, tag.text, 'edit_selected_tag')
+        self.snippet_tags.content.controls.append(t)
+        self.update()
+
+    def delete_tag(self, tag):
+        self.snippet_tags.content.controls.remove(tag)
+        self.update()
 
     def go_home(self, e):
         self.route.page.go('/home')

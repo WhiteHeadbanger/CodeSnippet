@@ -39,3 +39,7 @@ class Tag(ft.UserControl):
             self.route.new_snippet.add_tag(self)
         elif self.section == 'selected_tag':
             self.route.new_snippet.delete_tag(self)
+        elif self.section == 'edit_new_tag':
+            self.route.edit_snippet.add_tag(self)
+        elif self.section == 'edit_selected_tag':
+            self.route.edit_snippet.delete_tag(self)
