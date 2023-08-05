@@ -1,3 +1,4 @@
+import copy
 import flet as ft
 from . import (
     CARD_SNIPPET_OPACITY,

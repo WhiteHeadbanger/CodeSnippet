@@ -1,5 +1,5 @@
 import flet as ft
-from components import NavBar, CodeEditor
+from components import NavBar
 from views import HomeView, NewTagView, NewSnippetView
 from config import Config
 

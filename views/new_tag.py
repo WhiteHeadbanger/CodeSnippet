@@ -65,7 +65,7 @@ class NewTagView(ft.UserControl):
 
     def save_tag(self, e):
         self.route.page.go('/home')
-        self.route.home.content.content.controls[1].controls[0].add_tag(Tag(60, 26, self.colors[self.color_dropdown.value], self.name_field.value))
+        self.route.home.content.content.controls[1].controls[0].add_tag(Tag(self.route, 60, 26, self.colors[self.color_dropdown.value], self.name_field.value, section='home'))
         self.route.page.update()
 
     def close_view(self, e):
