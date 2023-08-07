@@ -61,13 +61,13 @@ class NewSnippetView(ft.UserControl):
     def initialize(self):
         self.tags_card.clear_tags()
         for tag in self.route.home.tag_card.get_tags():
-            t = Tag(self.route, 60, 26, tag.color, tag.text, 'new_tag')
+            t = Tag(self, 60, 26, tag.color, tag.text, False)
             self.tags_card.add_tag(t)
         
         self.update()
 
     def save_snippet(self, e):
-        existing_data = self.route.config.read_data()
+        existing_data = self.route.config.read_snippets_data()
         id = str(uuid4())
         title = self.title.value
         description = self.description.value
@@ -83,7 +83,7 @@ class NewSnippetView(ft.UserControl):
         }
         existing_data.append(data)
 
-        self.route.config.save_data(existing_data)
+        self.route.config.save_snippets_data(existing_data)
         self.route.page.go('/home')
         self.route.page.update()
 
@@ -96,7 +96,7 @@ class NewSnippetView(ft.UserControl):
                 self.delete_tag(_tag)
                 return
         
-        t = Tag(self.route, 60, 26, tag.color, tag.text, 'selected_tag')
+        t = Tag(self, 60, 26, tag.color, tag.text, True)
         self.snippet_tags.content.controls.append(t)
         self.update()
 

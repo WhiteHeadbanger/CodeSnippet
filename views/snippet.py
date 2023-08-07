@@ -1,6 +1,6 @@
 import flet as ft
 from components import CodeEditor, Tag
-from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY, BODY_OPACITY
+from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE
 
 class SnippetView(ft.UserControl):
 
@@ -13,7 +13,6 @@ class SnippetView(ft.UserControl):
         self.description = ft.Text(size=20)
         self.tags = ft.Container(
             content=ft.Row(),
-            #bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             height=30
         )
         self.code_editor = CodeEditor(self.route)
@@ -39,7 +38,7 @@ class SnippetView(ft.UserControl):
     
     def initialize(self):
         self.clear_controls()
-        existing_data = self.route.config.read_data()
+        existing_data = self.route.config.read_snippets_data()
         snippet = {}
         for snip in existing_data:
             if snip['id'] == self.snippet_id:
@@ -47,7 +46,7 @@ class SnippetView(ft.UserControl):
         
         self.title.value = snippet['title']
         self.description.value = snippet['description']
-        tags = [Tag(self.route, 60, 26, tag['color'], tag['text'], 'snippet') for tag in snippet['tags']]
+        tags = [Tag(self, 60, 26, tag['color'], tag['text']) for tag in snippet['tags']]
         self.tags.content.controls = tags
         self.code_editor.text_field.value = snippet['code']
         self.code_editor.handle_on_change(None)

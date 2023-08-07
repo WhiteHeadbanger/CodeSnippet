@@ -64,16 +64,24 @@ class HomeView(ft.UserControl):
 
     def initialize(self):
         self.card_grid.controls.clear()
+        self.tag_card.clear_tags()
         self.cards_grid()
+        self.load_tags()
         self.update()
         
     def cards_grid(self):
         #TODO use pydantic to create a snippet object from json
-        snippets_data = self.route.config.read_data()
+        snippets_data = self.route.config.read_snippets_data()
         for snip in snippets_data:
-            tags = [Tag(self.route, 60, 26, tag['color'], tag['text'], section="home") for tag in snip['tags']]
+            tags = [Tag(self, 60, 26, tag['color'], tag['text']) for tag in snip['tags']]
 
             self.card_grid.controls.append(CodeCard(snip['id'], self.route, 300, 300, snip['title'], snip['date'], snip['description'], tags, snip['code']))
+    
+    def load_tags(self):
+        tags_data = self.route.config.read_tags_data()
+        for tag in tags_data:
+            self.tag_card.add_tag(Tag(self, 60, 26, tag.color, tag.text))
+
     
     def delete_snippet(self, e):
         # Get card instance from dialog data
@@ -81,7 +89,7 @@ class HomeView(ft.UserControl):
         self.delete_snippet_dialog.open = False
 
         # Get data from json
-        snippets_data = self.route.config.read_data()
+        snippets_data = self.route.config.read_snippets_data()
         
         # Extract the snipet from database by ID
         snippet_to_remove = None
@@ -93,7 +101,7 @@ class HomeView(ft.UserControl):
         snippets_data.remove(snippet_to_remove)
 
         # Save database
-        self.route.config.save_data(snippets_data)
+        self.route.config.save_snippets_data(snippets_data)
         
         # Remove card from card grid
         self.card_grid.controls.remove(card)
