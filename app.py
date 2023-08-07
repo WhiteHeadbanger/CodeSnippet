@@ -18,6 +18,7 @@ class App:
         self.snippet = SnippetView(self)
         self.edit_snippet = EditSnippetView(self)
         
+        # Instance of Config
         self.config = Config(self)
 
         # Creates dict of routes
@@ -26,7 +27,8 @@ class App:
             '/newtag': self.new_tag,
             '/newsnippet': self.new_snippet,
             '/snippet': self.snippet,
-            '/editsnippet': self.edit_snippet
+            '/editsnippet': self.edit_snippet,
+
         }
 
         # Creates dict of methods to initialize the views
