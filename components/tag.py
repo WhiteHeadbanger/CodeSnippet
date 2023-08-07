@@ -1,16 +1,23 @@
 import flet as ft
+from dataclasses import dataclass
 from . import WHITE
+
+@dataclass
+class TagDataclass:
+    id: str
+    color: str
+    text: str
 
 class Tag(ft.UserControl):
 
-    def __init__(self, route, width, height, color, text, section):
+    def __init__(self, route, width, height, color, text, selected: bool | None = None):
         super().__init__()
         self.route = route
         self.width = width
         self.height = height
         self.color = color
         self.text = text
-        self.section = section
+        self.selected = selected
 
     def build(self):
         self.content = ft.Container(
@@ -19,7 +26,7 @@ class Tag(ft.UserControl):
             height=self.height,
             padding=5,
             border_radius=20,
-            on_click=self.handle_on_click,
+            on_click=self.handle_on_click if self.selected is not None else None,
             content=ft.Text(
                 value=self.text,
                 weight=ft.FontWeight.BOLD,
@@ -33,13 +40,7 @@ class Tag(ft.UserControl):
         return self.content
     
     def handle_on_click(self, e):
-        if self.section == 'home':
-            pass
-        elif self.section == 'new_tag':
-            self.route.new_snippet.add_tag(self)
-        elif self.section == 'selected_tag':
-            self.route.new_snippet.delete_tag(self)
-        elif self.section == 'edit_new_tag':
-            self.route.edit_snippet.add_tag(self)
-        elif self.section == 'edit_selected_tag':
-            self.route.edit_snippet.delete_tag(self)
+        if self.selected:
+            self.route.delete_tag(self)
+        else:
+            self.route.add_tag(self)

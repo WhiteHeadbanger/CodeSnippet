@@ -1,7 +1,8 @@
 import flet as ft
 
 from components import WHITE, CARD_SNIPPET_OPACITY, NAVBAR_SEARCH_OVERLAY_OPACITY, NAVBAR_SEARCH_TEXT_OPACITY, TAG_PURPLE, TAG_PINK, TAG_BLUE, TAG_GREEN
-from components import Tag
+from components import Tag, TagDataclass
+from uuid import uuid4
 
 class NewTagView(ft.UserControl):
 
@@ -52,7 +53,7 @@ class NewTagView(ft.UserControl):
                     self.color_dropdown,
                     ft.TextButton(
                         text="Save",
-                        on_click=self.save_tag
+                        on_click=self.create_tag
                     )
                 ]
             )
@@ -62,11 +63,11 @@ class NewTagView(ft.UserControl):
     
     def initialize(self):
         pass
-
-    def save_tag(self, e):
+    
+    def create_tag(self, e):
+        tag = TagDataclass(id = str(uuid4()), color = self.colors[self.color_dropdown.value], text = self.name_field.value)
+        self.route.config.save_tags_data(tag)
         self.route.page.go('/home')
-        self.route.home.content.content.controls[1].controls[0].add_tag(Tag(self.route, 60, 26, self.colors[self.color_dropdown.value], self.name_field.value, section='home'))
-        self.route.page.update()
 
     def close_view(self, e):
         self.route.page.go('/home')
