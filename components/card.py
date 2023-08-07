@@ -16,7 +16,7 @@ class Card(ft.UserControl):
         self.width = width
         self.height = height
         self.title_text = title
-        self.tags = [tag for tag in tags] if tags is not None else []
+        self.tags = tags if tags is not None else []
 
         self.title = ft.Text(
             value=self.title_text,
@@ -42,7 +42,7 @@ class Card(ft.UserControl):
         )
 
         for tag in self.tags:
-            self.container.content.controls[1].controls.append(tag)
+            self.tag_row.controls.append(tag)
         
         return self.container
     
@@ -88,6 +88,14 @@ class CodeCard(Card):
             icon_size=17
         )
 
+        self.delete_button = ft.IconButton(
+            icon=ft.icons.DELETE,
+            on_click=self.go_delete_snippet,
+            visible=False,
+            icon_size=17,
+            icon_color=ft.colors.RED_ACCENT
+        )
+
     def build(self):
         self.container = super().build()
         self.container.scale = ft.transform.Scale(1)
@@ -98,7 +106,7 @@ class CodeCard(Card):
         self.container.content.controls.remove(self.title)
         self.container.content.controls.insert(0, (ft.Row(
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-            controls=[self.title, self.edit_button]
+            controls=[self.title, self.edit_button, self.delete_button]
         )))
         self.container.content.controls.append(self.date)
         self.container.content.controls.append(self.description)
@@ -123,14 +131,20 @@ class CodeCard(Card):
     def animate_hovered(self):
         self.container.scale = 1.1
         self.edit_button.visible = True
+        self.delete_button.visible = True
     
     def animate_unhovered(self):
         self.container.scale = 1
         self.edit_button.visible = False
+        self.delete_button.visible = False
 
     def go_edit_snippet(self, e):
         self.route.edit_snippet.snippet_id = self.id
         self.route.page.go('/editsnippet')
+
+    def go_delete_snippet(self, e):
+        self.route.home.open_dialog(self)
+        
     
 class TagCard(Card):
 

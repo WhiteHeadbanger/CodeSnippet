@@ -1,1 +1,1 @@
-[{"id": "86b69d5e-71f5-4951-a73e-f5287cbfba2e", "title": "Hello World", "description": "How to create a hello world", "tags": [{"text": "python", "color": "#D842E5"}], "date": "now", "code": "print(\"hello world\")"}, {"id": "657f4108-e1cf-48bd-a58c-eb59ebdae681", "title": "test code", "description": "test code", "tags": [{"text": "python", "color": "#D842E5"}], "date": "now", "code": "def main():\n    print('soy genial lalala')\n\nmain()"}]
+[]
