@@ -29,13 +29,15 @@ class EditSnippetView(ft.UserControl):
 
     def build(self):
         self.content = ft.Container(
-            margin=ft.margin.only(top=100, left=270),
-            content=ft.Row(
-                vertical_alignment=ft.CrossAxisAlignment.START,
+            margin=ft.margin.only(top=100),
+            content=ft.ResponsiveRow(
+                #vertical_alignment=ft.CrossAxisAlignment.START,
+                alignment=ft.MainAxisAlignment.CENTER,
                 spacing=40,
                 controls=[
                     ft.Column(
                         width=1000,
+                        col=6,
                         controls=[
                             self.title,
                             self.description,
@@ -45,12 +47,13 @@ class EditSnippetView(ft.UserControl):
                         ]
                     ),
                     ft.Column(
+                        col=2,
                         controls=[
-                            self.tags_card,
+                            ft.Row(controls=[self.tags_card, ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)], vertical_alignment=ft.CrossAxisAlignment.START),
+                            #self.tags_card,
                             ft.TextButton(text="Save", on_click=self.save_snippet),
                         ]
                     ),
-                    ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)
                 ]
             )
         )

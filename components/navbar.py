@@ -11,18 +11,15 @@ from . import (
 
 class NavBar(ft.UserControl):
 
-    def __init__(self, route, width, height):
+    def __init__(self, route):
         super().__init__()
         self.route = route
-        self.width = width
-        self.height = height
 
     def build(self):
         return ft.Container(
             bgcolor=NAVBAR_BACKGROUND,
             content=ft.Row(
-                width=self.width,
-                height=self.height,
+                height=70,
                 alignment=ft.MainAxisAlignment.SPACE_EVENLY,
                 spacing=50,
                 controls=[

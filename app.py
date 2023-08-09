@@ -9,7 +9,7 @@ class App:
         self.page = page
 
         # Creates the navbar
-        self.navbar = NavBar(self, width=1920, height=70)
+        self.navbar = NavBar(self)
 
         # Instances of views. Passing self as a parameter to facilitate communication between all views
         self.home = HomeView(self)
@@ -41,8 +41,9 @@ class App:
         }
 
         # App body
-        self.container = ft.Container(content=self.routes['/home'])
+        self.container = ft.Container(content=self.routes['/home'], alignment=ft.alignment.center)
         self.body = ft.Column(
+            #horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             expand=True,
             controls=[
                 self.navbar,

@@ -1,4 +1,4 @@
-from .colors import *
+from constants import *
 from .navbar import NavBar
 from .tag import Tag, TagDataclass
 from .card import CodeCard, TagCard

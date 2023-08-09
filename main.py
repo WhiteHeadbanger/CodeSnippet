@@ -1,7 +1,6 @@
 import flet as ft
-from components import BODY_OPACITY, WHITE
-""" from views.home import _home_view_
-from views.new_tag import _newtag_view_ """
+from constants import BODY_OPACITY, WHITE
+
 from app import App
 
 

@@ -9,34 +9,40 @@ class NewSnippetView(ft.UserControl):
         super().__init__()
         self.route = route
 
-        self.code_editor = CodeEditor(self.route)
-        self.tags_card = TagCard(self.route, 300, 500, "Your tags")
+        self.code_editor = CodeEditor(self)
+        self.tags_card = TagCard(self, 300, 500, "Your tags")
         self.snippet_tags = ft.Container(
             content=ft.Row(),
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             height=30,
+            width=700,
         )
         self.title = ft.TextField(
+            width=700,
             hint_text="Title",
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
+            focused_border_color=ft.colors.TRANSPARENT
         )
         self.description = ft.TextField(
+            width=700,
             hint_text="Description",
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
+            focused_border_color=ft.colors.TRANSPARENT
         )
 
 
     def build(self):
         self.content = ft.Container(
-            margin=ft.margin.only(top=100, left=270),
-            content=ft.Row(
-                vertical_alignment=ft.CrossAxisAlignment.START,
+            margin=ft.margin.only(top=100),
+            content=ft.ResponsiveRow(
+                alignment=ft.MainAxisAlignment.CENTER,
                 spacing=40,
                 controls=[
                     ft.Column(
-                        width=1000,
+                        #width=1000,
+                        col=6,
                         controls=[
                             self.title,
                             self.description,
@@ -46,12 +52,19 @@ class NewSnippetView(ft.UserControl):
                         ]
                     ),
                     ft.Column(
+                        col=2,
                         controls=[
-                            self.tags_card,
+                            ft.Row(
+                                vertical_alignment=ft.CrossAxisAlignment.START,
+                                controls=[
+                                    self.tags_card, 
+                                    ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)
+                                ], 
+                            ),
                             ft.TextButton(text="Save", on_click=self.save_snippet),
                         ]
                     ),
-                    ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)
+                    
                 ]
             )
         )

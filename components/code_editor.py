@@ -11,23 +11,22 @@ class CodeEditor(ft.UserControl):
         self.route = route
 
         self.text_field = ft.TextField(
+            hint_text="Your code...",
+            width=700,
             bgcolor=ft.colors.with_opacity(CARD_SNIPPET_OPACITY, WHITE),
             color=WHITE,
             multiline=True,
             dense=False,
             on_change=self.handle_on_change,
-            expand=True,
             prefix_text="1 ",
-            content_padding=5
+            content_padding=5,
+            focused_border_color=ft.colors.TRANSPARENT
         )
 
     def build(self):
         self.container = ft.Container(
             content=ft.Row(
-                alignment=ft.MainAxisAlignment.START,
-                vertical_alignment=ft.CrossAxisAlignment.START,
                 controls=[self.text_field],
-                expand=True
             )
         )
 

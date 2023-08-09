@@ -99,18 +99,27 @@ class CodeCard(Card):
     def build(self):
         self.container = super().build()
         self.container.scale = ft.transform.Scale(1)
-        self.container.animate_scale=ft.animation.Animation(600, ft.AnimationCurve.BOUNCE_OUT)
+        self.container.animate_scale=ft.animation.Animation(600, ft.AnimationCurve.EASE)
         self.container.on_click = self.handle_click
-        self.container.on_hover = lambda e: self.handle_hover(e)
+        self.container.on_hover = self.handle_hover
 
         self.container.content.controls.remove(self.title)
         self.container.content.controls.insert(0, (ft.Row(
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-            controls=[self.title, self.edit_button, self.delete_button]
+            controls=[
+                self.title,
+                ft.Row(
+                    spacing=10,
+                    controls=[
+                        self.edit_button, 
+                        self.delete_button
+                    ]
+                ) 
+            ]
         )))
         self.container.content.controls.append(self.date)
         self.container.content.controls.append(self.description)
-        
+
         return self.container
     
     def handle_click(self, e):

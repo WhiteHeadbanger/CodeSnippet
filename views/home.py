@@ -20,25 +20,22 @@ class HomeView(ft.UserControl):
         )
 
         self.content = ft.Container(
-            margin=ft.margin.only(top=100, left=270),
-            content=ft.Row(
-                vertical_alignment=ft.CrossAxisAlignment.START,
+            margin=ft.margin.only(top=100),
+            content=ft.ResponsiveRow(
+                #vertical_alignment=ft.CrossAxisAlignment.START,
                 spacing=40,
+                alignment=ft.MainAxisAlignment.CENTER,
                 controls=[
                     ft.Column(
+                        col=6,
                         controls=[self.card_grid]
                     ),
                     ft.Column(
+                        col=2,
                         controls=[self.tag_card]
                     )
                 ]
             )
-        )
-
-        self.blurred_container = ft.Container(
-            opacity=0.1,
-            blur=10,
-            visible=False
         )
 
         self.delete_snippet_dialog = ft.AlertDialog(
@@ -54,7 +51,6 @@ class HomeView(ft.UserControl):
         self.stack = ft.Stack(
             controls=[
                 self.content,
-                self.blurred_container,
                 self.delete_snippet_dialog
             ]
         )
