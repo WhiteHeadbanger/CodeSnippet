@@ -31,7 +31,6 @@ class EditSnippetView(ft.UserControl):
         self.content = ft.Container(
             margin=ft.margin.only(top=100),
             content=ft.ResponsiveRow(
-                #vertical_alignment=ft.CrossAxisAlignment.START,
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=40,
                 controls=[
@@ -50,7 +49,6 @@ class EditSnippetView(ft.UserControl):
                         col=2,
                         controls=[
                             ft.Row(controls=[self.tags_card, ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)], vertical_alignment=ft.CrossAxisAlignment.START),
-                            #self.tags_card,
                             ft.TextButton(text="Save", on_click=self.save_snippet),
                         ]
                     ),

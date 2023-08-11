@@ -1,4 +1,5 @@
 import flet as ft
+from syntax_highlight.utils import python_tokenizer, save_code_to_file, delete_code_file
 from components import TagCard, CodeEditor, Tag
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY
 from uuid import uuid4
@@ -41,7 +42,6 @@ class NewSnippetView(ft.UserControl):
                 spacing=40,
                 controls=[
                     ft.Column(
-                        #width=1000,
                         col=6,
                         controls=[
                             self.title,
@@ -86,17 +86,26 @@ class NewSnippetView(ft.UserControl):
         description = self.description.value
         tags = [{"text":tag.text, "color":tag.color} for tag in self.snippet_tags.content.controls]
         code = self.code_editor.text_field.value
+
+        #save code to temp file
+        save_code_to_file(code)
+        #tokenize
+        tokens = python_tokenizer()
+        # delete file
+        delete_code_file()
+
         data = {
             'id': id,
             'title': title,
             'description': description,
             'tags': tags,
             'date': 'now',
-            'code': code
+            'code': code,
+            'tokens': tokens
         }
         existing_data.append(data)
-
         self.route.config.save_snippets_data(existing_data)
+
         self.route.page.go('/home')
         self.route.page.update()
 

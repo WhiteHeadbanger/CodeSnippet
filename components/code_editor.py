@@ -23,16 +23,17 @@ class CodeEditor(ft.UserControl):
             focused_border_color=ft.colors.TRANSPARENT
         )
 
+        self.text_row = ft.Row(controls=[self.text_field])
+
     def build(self):
         self.container = ft.Container(
-            content=ft.Row(
-                controls=[self.text_field],
-            )
+            content=self.text_row
         )
 
         return self.container
 
     def handle_on_change(self, e):
+        ## Handle new lines
         count_new_lines = self.text_field.value.count("\n")
         
         self.text_field.prefix_text = "1 "
@@ -40,8 +41,7 @@ class CodeEditor(ft.UserControl):
             self.update()
             return
         
-        for i in range(1, count_new_lines):
+        for i in range(1, count_new_lines+1):
             self.text_field.prefix_text += f'\n{i+1} '
-        self.text_field.prefix_text += f'\n{count_new_lines+1} '
 
         self.update()
