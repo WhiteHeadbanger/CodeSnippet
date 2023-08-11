@@ -72,11 +72,18 @@ class NewSnippetView(ft.UserControl):
         return self.content
     
     def initialize(self):
-        self.tags_card.clear_tags()
+        self.clear_controls()
         for tag in self.route.home.tag_card.get_tags():
             t = Tag(self, 60, 26, tag.color, tag.text, False)
             self.tags_card.add_tag(t)
         
+        self.update()
+
+    def clear_controls(self):
+        self.tags_card.clear_tags()
+        self.title.value = ""
+        self.description.value = ""
+        self.code_editor.clear_control()
         self.update()
 
     def save_snippet(self, e):
@@ -92,7 +99,7 @@ class NewSnippetView(ft.UserControl):
         #tokenize
         tokens = python_tokenizer()
         # delete file
-        delete_code_file()
+        #delete_code_file()
 
         data = {
             'id': id,

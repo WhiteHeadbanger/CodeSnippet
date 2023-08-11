@@ -51,6 +51,7 @@ COLORS = {
     'COLONEQUAL': '#e8290c',
     'OP': '#e8290c',
     'TYPE_COMMENT': '#949693',
+    'COMMENT': '#949693',
     'CLASS_NAME': '#0ca2e8',
     'FUNC_NAME': '#34e80c'
 

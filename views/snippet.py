@@ -17,8 +17,6 @@ class SnippetView(ft.UserControl):
             content=ft.Row(),
             height=30
         )
-        #self.code_editor = CodeEditor(self.route)
-        self.line_numbers_area = ft.ListView(width=50, controls=[])
         self.code_area = ft.Container(
             width=700,
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
@@ -37,11 +35,7 @@ class SnippetView(ft.UserControl):
                     self.title,
                     self.description,
                     self.tags,
-                    ft.Stack(
-                        controls=[self.line_numbers_area, self.code_area],
-
-                    )
-                    #self.code_editor
+                    self.code_area
                 ]
             )
         )
@@ -64,25 +58,26 @@ class SnippetView(ft.UserControl):
         # iterate over tokenized code
         row_counter = 0
         self.code_area.content.controls.append(ft.Row())
-        self.line_numbers_area.controls.append(ft.Text(value=row_counter + 1))
+        self.code_area.content.controls[0].controls.append(ft.Text("1 "))
         for token in snippet['tokens']:
-            if token[0] == 'NEWLINE':
+            if token[0] in ['NEWLINE', 'NL']:
                 row_counter += 1
                 self.code_area.content.controls.append(ft.Row())
-                self.line_numbers_area.controls.append(ft.Text(value=row_counter + 1))
+                self.code_area.content.controls[row_counter].controls.append(ft.Text(f"{row_counter+1}"))
                 continue
 
             elif token[0] == 'INDENT':
-                self.code_area.content.controls[row_counter].controls.append(ft.Text(value="    "))
+                self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text="    "))
                 continue
-            else:
-                self.code_area.content.controls[row_counter].controls.append(ft.Text(value=token[1], color=COLORS[token[0]]))
-        
+            elif token[0] == 'SPACE':
+                self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=" "))
+                continue
+            elif token[0] == 'ENDMARKER':
+                continue
 
-        #self.code_editor.text_field.value = snippet['code']
-        #self.code_editor.handle_on_change(None)
-        #self.code_editor.text_field.disabled = True
-        #self.code_editor.update()
+            else:
+                self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=token[1], style=ft.TextStyle(color=COLORS[token[0]])))
+        
         self.update()
 
     def update_code(self, code):
@@ -92,7 +87,5 @@ class SnippetView(ft.UserControl):
         self.title.value = ""
         self.description.value = ""
         self.tags.content.controls.clear()
-        #self.code_editor.text_field.value = ""
-        #self.code_editor.text_field.prefix_text = "1 "
-        #self.code_editor.update()
+        self.code_area.content.controls.clear()
         self.update()

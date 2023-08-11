@@ -45,3 +45,7 @@ class CodeEditor(ft.UserControl):
             self.text_field.prefix_text += f'\n{i+1} '
 
         self.update()
+
+    def clear_control(self):
+        self.text_field.value = ""
+        self.update()
