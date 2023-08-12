@@ -99,7 +99,7 @@ class NewSnippetView(ft.UserControl):
         #tokenize
         tokens = python_tokenizer()
         # delete file
-        #delete_code_file()
+        delete_code_file()
 
         data = {
             'id': id,

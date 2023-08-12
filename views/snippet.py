@@ -17,6 +17,7 @@ class SnippetView(ft.UserControl):
             content=ft.Row(),
             height=30
         )
+        #self.line_numbers = ft.Text(width=20)
         self.code_area = ft.Container(
             width=700,
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
@@ -35,6 +36,7 @@ class SnippetView(ft.UserControl):
                     self.title,
                     self.description,
                     self.tags,
+                    #ft.Stack(controls=[self.line_numbers, self.code_area])
                     self.code_area
                 ]
             )
@@ -54,19 +56,28 @@ class SnippetView(ft.UserControl):
         self.description.value = snippet['description']
         tags = [Tag(self, 60, 26, tag['color'], tag['text']) for tag in snippet['tags']]
         self.tags.content.controls = tags
-        
-        # iterate over tokenized code
+        self.update_tokens(snippet['tokens'])
+       
+
+        self.update()
+
+    def update_tokens(self, tokens):
+         # iterate over tokenized code
         row_counter = 0
         indent = 0
         text_start = True
+        line_number = 1
         self.code_area.content.controls.append(ft.Row())
-        self.code_area.content.controls[0].controls.append(ft.Text("1 "))
-        for token in snippet['tokens']:
+        self.code_area.content.controls[0].controls.append(ft.Text(str(line_number)))
+        #self.line_numbers.value = "1\n"
+        for token in tokens:
             if token[0] in ['NEWLINE', 'NL']:
                 row_counter += 1
+                line_number += 1
                 text_start = True
                 self.code_area.content.controls.append(ft.Row())
-                self.code_area.content.controls[row_counter].controls.append(ft.Text(f"{row_counter+1}"))
+                self.code_area.content.controls[row_counter].controls.append(ft.Text(str(line_number)))
+                #self.line_numbers.value += (row_counter+1) + "\n"
                 continue
 
             elif token[0] == 'INDENT':
@@ -90,11 +101,6 @@ class SnippetView(ft.UserControl):
                     text_start = False
                 else:
                     self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=token[1], style=ft.TextStyle(color=COLORS[token[0]])))
-
-        self.update()
-
-    def update_code(self, code):
-        pass
 
     def clear_controls(self):
         self.title.value = ""
