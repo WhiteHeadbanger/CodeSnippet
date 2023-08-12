@@ -16,7 +16,7 @@ class Config:
 
     def save_snippets_data(self, data):
         with open(self.snippets_dir, "w") as file:
-            json.dump(data, file)
+            json.dump(data, file, indent=2)
 
     def read_tags_data(self):
         with open(self.tags_dir, "r") as file:

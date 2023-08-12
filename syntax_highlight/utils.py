@@ -41,8 +41,8 @@ def python_tokenizer():
                     new_line_counter = 0
                     continue
                 
-                elif _token.exact_type == token.DEDENT:
-                    continue
+                #elif _token.exact_type == token.DEDENT:
+                    #continue
 
                 elif token.tok_name[_token.exact_type] in ['NEWLINE', 'NL']:
                     new_line_counter += 1

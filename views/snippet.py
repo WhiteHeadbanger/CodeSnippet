@@ -57,27 +57,40 @@ class SnippetView(ft.UserControl):
         
         # iterate over tokenized code
         row_counter = 0
+        indent = 0
+        text_start = True
         self.code_area.content.controls.append(ft.Row())
         self.code_area.content.controls[0].controls.append(ft.Text("1 "))
         for token in snippet['tokens']:
             if token[0] in ['NEWLINE', 'NL']:
                 row_counter += 1
+                text_start = True
                 self.code_area.content.controls.append(ft.Row())
                 self.code_area.content.controls[row_counter].controls.append(ft.Text(f"{row_counter+1}"))
                 continue
 
             elif token[0] == 'INDENT':
-                self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text="    "))
+                indent = len(token[1])
                 continue
+            
+            elif token[0] == 'DEDENT':
+                indent -= 4
+                continue
+
             elif token[0] == 'SPACE':
                 self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=" "))
                 continue
+            
             elif token[0] == 'ENDMARKER':
-                continue
+                break
 
             else:
-                self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=token[1], style=ft.TextStyle(color=COLORS[token[0]])))
-        
+                if text_start:
+                    self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=f"{' ' * indent}{token[1]}", style=ft.TextStyle(color=COLORS[token[0]])))
+                    text_start = False
+                else:
+                    self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=token[1], style=ft.TextStyle(color=COLORS[token[0]])))
+
         self.update()
 
     def update_code(self, code):
