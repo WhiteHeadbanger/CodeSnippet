@@ -3,6 +3,7 @@ from components import CodeEditor, Tag
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE
 from syntax_highlight.colors import COLORS
 
+import pyperclip
 
 class SnippetView(ft.UserControl):
 
@@ -13,6 +14,12 @@ class SnippetView(ft.UserControl):
 
         self.title = ft.Text(size=30)
         self.description = ft.Text(size=20)
+        self.copy_code_button = ft.IconButton(
+            icon=ft.icons.COPY,
+            on_click=self.copy_code_to_clipboard,
+            visible=True,
+            icon_size=17
+        )
         self.tags = ft.Container(
             content=ft.Row(),
             height=30
@@ -33,7 +40,14 @@ class SnippetView(ft.UserControl):
             content=ft.Column(
                 spacing=10,
                 controls=[
-                    self.title,
+                    ft.Row(
+                        wrap=True,
+                        controls=[
+                            self.title,
+                            self.copy_code_button
+                        ],
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN
+                    ),
                     self.description,
                     self.tags,
                     self.code_area
@@ -47,8 +61,6 @@ class SnippetView(ft.UserControl):
         self.clear_controls()
         
         snippet_data = self.route.config.read_snippets_data(id=self.snippet_id)
-       
-        #TODO error messages when stuff is None
         
         self.title.value = snippet_data.get('title', None)
         self.description.value = snippet_data.get('description', None)
@@ -56,7 +68,8 @@ class SnippetView(ft.UserControl):
         self.tags.content.controls = tags
         tokens = snippet_data.get('tokens', None)
         
-        self.fill_code_area(tokens)
+        if tokens is not None:
+            self.fill_code_area(tokens)
        
         self.update()
 
@@ -106,3 +119,8 @@ class SnippetView(ft.UserControl):
         self.tags.content.controls.clear()
         self.code_area.content.controls.clear()
         self.update()
+
+    def copy_code_to_clipboard(self, e):
+        snippet_data = self.route.config.read_snippets_data(id=self.snippet_id)
+        snippet_code = snippet_data.get('code', None)
+        pyperclip.copy(snippet_code)
