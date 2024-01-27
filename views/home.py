@@ -22,7 +22,6 @@ class HomeView(ft.UserControl):
         self.content = ft.Container(
             margin=ft.margin.only(top=100),
             content=ft.ResponsiveRow(
-                #vertical_alignment=ft.CrossAxisAlignment.START,
                 spacing=40,
                 alignment=ft.MainAxisAlignment.CENTER,
                 controls=[

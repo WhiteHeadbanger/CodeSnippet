@@ -11,17 +11,17 @@ class SnippetView(ft.UserControl):
         self.route = route
         self.snippet_id = None
 
-        self.title = ft.Text(size=24)
+        self.title = ft.Text(size=30)
         self.description = ft.Text(size=20)
         self.tags = ft.Container(
             content=ft.Row(),
             height=30
         )
-        #self.line_numbers = ft.Text(width=20)
         self.code_area = ft.Container(
             width=700,
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
-            content=ft.Column()
+            content=ft.Column(),
+            padding=10
         )
 
     def build(self):
@@ -29,14 +29,13 @@ class SnippetView(ft.UserControl):
             margin=ft.margin.only(top=100, left=270),
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             padding=10,
-            width=1000,
+            width=700,
             content=ft.Column(
                 spacing=10,
                 controls=[
                     self.title,
                     self.description,
                     self.tags,
-                    #ft.Stack(controls=[self.line_numbers, self.code_area])
                     self.code_area
                 ]
             )
@@ -46,38 +45,37 @@ class SnippetView(ft.UserControl):
     
     def initialize(self):
         self.clear_controls()
-        existing_data = self.route.config.read_snippets_data()
-        snippet = {}
-        for snip in existing_data:
-            if snip['id'] == self.snippet_id:
-                snippet.update(snip)
         
-        self.title.value = snippet['title']
-        self.description.value = snippet['description']
-        tags = [Tag(self, 60, 26, tag['color'], tag['text']) for tag in snippet['tags']]
-        self.tags.content.controls = tags
-        self.update_tokens(snippet['tokens'])
+        snippet_data = self.route.config.read_snippets_data(id=self.snippet_id)
        
-
+        #TODO error messages when stuff is None
+        
+        self.title.value = snippet_data.get('title', None)
+        self.description.value = snippet_data.get('description', None)
+        tags = [Tag(self, 60, 26, tag.get('color', None), tag.get('text', None)) for tag in snippet_data.get('tags', None)]
+        self.tags.content.controls = tags
+        tokens = snippet_data.get('tokens', None)
+        
+        self.fill_code_area(tokens)
+       
         self.update()
 
-    def update_tokens(self, tokens):
-         # iterate over tokenized code
+    def fill_code_area(self, tokens):
         row_counter = 0
         indent = 0
-        text_start = True
         line_number = 1
         self.code_area.content.controls.append(ft.Row())
-        self.code_area.content.controls[0].controls.append(ft.Text(str(line_number)))
-        #self.line_numbers.value = "1\n"
+        self.code_area.content.controls[0].controls.append(ft.Text())
+        
+        text_start = True  # Initialize text_start to True
+        
         for token in tokens:
             if token[0] in ['NEWLINE', 'NL']:
                 row_counter += 1
                 line_number += 1
-                text_start = True
                 self.code_area.content.controls.append(ft.Row())
-                self.code_area.content.controls[row_counter].controls.append(ft.Text(str(line_number)))
-                #self.line_numbers.value += (row_counter+1) + "\n"
+                self.code_area.content.controls[row_counter].controls.append(ft.Text())
+                text_start = True  # Reset text_start on newline
                 continue
 
             elif token[0] == 'INDENT':
@@ -89,18 +87,18 @@ class SnippetView(ft.UserControl):
                 continue
 
             elif token[0] == 'SPACE':
-                self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=" "))
-                continue
-            
-            elif token[0] == 'ENDMARKER':
-                break
-
+                text = " "
             else:
-                if text_start:
-                    self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=f"{' ' * indent}{token[1]}", style=ft.TextStyle(color=COLORS[token[0]])))
-                    text_start = False
-                else:
-                    self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=token[1], style=ft.TextStyle(color=COLORS[token[0]])))
+                text = token[1]
+            
+            style = ft.TextStyle(color=COLORS.get(token[0], None))
+            spans = self.code_area.content.controls[row_counter].controls[0].spans
+            
+            if text_start:
+                text = f"{' ' * indent}{text}"
+                text_start = False  # Set text_start to False after appending the first character
+            
+            spans.append(ft.TextSpan(text=text, style=style))
 
     def clear_controls(self):
         self.title.value = ""

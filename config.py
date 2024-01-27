@@ -9,9 +9,12 @@ class Config:
         self.snippets_dir = './data/snippets.json'
         self.tags_dir = './data/tags.json'
 
-    def read_snippets_data(self):
+    def read_snippets_data(self, id = None):
         with open(self.snippets_dir, "r") as file:
             data = json.load(file)
+
+        if id:
+            data = next((snip for snip in data if snip['id'] == id), None)
         return data
 
     def save_snippets_data(self, data):

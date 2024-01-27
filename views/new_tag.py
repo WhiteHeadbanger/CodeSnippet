@@ -1,7 +1,7 @@
 import flet as ft
 
 from components import WHITE, CARD_SNIPPET_OPACITY, NAVBAR_SEARCH_OVERLAY_OPACITY, NAVBAR_SEARCH_TEXT_OPACITY, TAG_PURPLE, TAG_PINK, TAG_BLUE, TAG_GREEN
-from components import Tag, TagDataclass
+from components import TagDataclass
 from uuid import uuid4
 
 class NewTagView(ft.UserControl):
@@ -42,9 +42,9 @@ class NewTagView(ft.UserControl):
             ]
         )
         
-
     def build(self):
         self.content = ft.Container(
+            margin=ft.margin.only(top=100),
             width=400,
             height=600,
             alignment=ft.alignment.center,

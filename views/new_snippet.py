@@ -1,5 +1,6 @@
 import flet as ft
-from syntax_highlight.utils import python_tokenizer, save_code_to_file, delete_code_file
+from syntax_highlight.utils import save_code_to_file, delete_code_file
+from syntax_highlight.lexers.python import tokenizer
 from components import TagCard, CodeEditor, Tag
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY
 from uuid import uuid4
@@ -12,6 +13,7 @@ class NewSnippetView(ft.UserControl):
 
         self.code_editor = CodeEditor(self)
         self.tags_card = TagCard(self, 300, 500, "Your tags")
+        self.tags_card.new_tag_button.visible = False
         self.snippet_tags = ft.Container(
             content=ft.Row(),
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
@@ -86,18 +88,24 @@ class NewSnippetView(ft.UserControl):
         self.code_editor.clear_control()
         self.update()
 
-    def save_snippet(self, e):
-        existing_data = self.route.config.read_snippets_data()
+    def get_control_data(self):
         id = str(uuid4())
         title = self.title.value
         description = self.description.value
         tags = [{"text":tag.text, "color":tag.color} for tag in self.snippet_tags.content.controls]
         code = self.code_editor.text_field.value
+        
+        return id, title, description, tags, code
+
+    def save_snippet(self, e):
+        existing_data = self.route.config.read_snippets_data()
+        
+        id, title, description, tags, code = self.get_control_data()
 
         #save code to temp file
         save_code_to_file(code)
         #tokenize
-        tokens = python_tokenizer()
+        tokens = tokenizer()
         # delete file
         delete_code_file()
 

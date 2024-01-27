@@ -160,14 +160,14 @@ class TagCard(Card):
     def __init__(self, route, width, height, title, tags = None):
         super().__init__(route, width, height, title, tags)
 
-    def build(self):
-        self.container = super().build()
-
-        new_tag_button = ft.TextButton(
+        self.new_tag_button = ft.TextButton(
             text="New tag",
             on_click=self.go_newtag
         )
-        self.container.content.controls.append(new_tag_button)
+
+    def build(self):
+        self.container = super().build()
+        self.container.content.controls.append(self.new_tag_button)
         return self.container
 
     def go_newtag(self, e):
