@@ -1,6 +1,6 @@
 import flet as ft
 from components import NavBar
-from views import HomeView, NewTagView, NewSnippetView
+from views import HomeView, NewTagView, NewSnippetView, SnippetView, EditSnippetView
 from config import Config
 
 class App:
@@ -9,20 +9,26 @@ class App:
         self.page = page
 
         # Creates the navbar
-        self.navbar = NavBar(self, width=1920, height=70)
+        self.navbar = NavBar(self)
 
         # Instances of views. Passing self as a parameter to facilitate communication between all views
         self.home = HomeView(self)
         self.new_tag = NewTagView(self)
         self.new_snippet = NewSnippetView(self)
+        self.snippet = SnippetView(self)
+        self.edit_snippet = EditSnippetView(self)
         
+        # Instance of Config
         self.config = Config(self)
 
         # Creates dict of routes
         self.routes = {
             '/home': self.home,
             '/newtag': self.new_tag,
-            '/newsnippet': self.new_snippet
+            '/newsnippet': self.new_snippet,
+            '/snippet': self.snippet,
+            '/editsnippet': self.edit_snippet,
+
         }
 
         # Creates dict of methods to initialize the views
@@ -30,11 +36,14 @@ class App:
             '/home': self.home.initialize,
             '/newtag': self.new_tag.initialize,
             '/newsnippet': self.new_snippet.initialize,
+            '/snippet': self.snippet.initialize,
+            '/editsnippet': self.edit_snippet.initialize
         }
 
         # App body
-        self.container = ft.Container(content=self.routes['/home'])
+        self.container = ft.Container(content=self.routes['/home'], alignment=ft.alignment.center)
         self.body = ft.Column(
+            #horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             expand=True,
             controls=[
                 self.navbar,

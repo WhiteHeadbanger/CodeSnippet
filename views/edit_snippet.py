@@ -1,40 +1,31 @@
 import flet as ft
-from syntax_highlight.utils import save_code_to_file, delete_code_file
-from syntax_highlight.lexers.python import tokenizer
 from components import TagCard, CodeEditor, Tag
-from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY
-from uuid import uuid4
+from components import NAVBAR_SEARCH_OVERLAY_OPACITY, NAVBAR_SEARCH_TEXT_OPACITY, WHITE
 
-class NewSnippetView(ft.UserControl):
-    
+class EditSnippetView(ft.UserControl):
+
     def __init__(self, route):
         super().__init__()
         self.route = route
+        self.snippet_id = None
 
-        self.code_editor = CodeEditor(self)
-        self.tags_card = TagCard(self, 300, 500, "Your tags")
-        self.tags_card.new_tag_button.visible = False
+        self.code_editor = CodeEditor(self.route)
+        self.tags_card = TagCard(self.route, 300, 500, "Your tags")
         self.snippet_tags = ft.Container(
             content=ft.Row(),
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             height=30,
-            width=700,
         )
         self.title = ft.TextField(
-            width=700,
             hint_text="Title",
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
-            focused_border_color=ft.colors.TRANSPARENT
         )
         self.description = ft.TextField(
-            width=700,
             hint_text="Description",
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
-            focused_border_color=ft.colors.TRANSPARENT
         )
-
 
     def build(self):
         self.content = ft.Container(
@@ -44,6 +35,7 @@ class NewSnippetView(ft.UserControl):
                 spacing=40,
                 controls=[
                     ft.Column(
+                        width=1000,
                         col=6,
                         controls=[
                             self.title,
@@ -56,17 +48,10 @@ class NewSnippetView(ft.UserControl):
                     ft.Column(
                         col=2,
                         controls=[
-                            ft.Row(
-                                vertical_alignment=ft.CrossAxisAlignment.START,
-                                controls=[
-                                    self.tags_card, 
-                                    ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)
-                                ], 
-                            ),
+                            ft.Row(controls=[self.tags_card, ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)], vertical_alignment=ft.CrossAxisAlignment.START),
                             ft.TextButton(text="Save", on_click=self.save_snippet),
                         ]
                     ),
-                    
                 ]
             )
         )
@@ -75,57 +60,53 @@ class NewSnippetView(ft.UserControl):
     
     def initialize(self):
         self.clear_controls()
+        
+        self.tags_card.clear_tags()
         for tag in self.route.home.tag_card.get_tags():
             t = Tag(self, 60, 26, tag.color, tag.text, False)
             self.tags_card.add_tag(t)
         
+        existing_data = self.route.config.read_snippets_data()
+        snippet = {}
+        for snip in existing_data:
+            if snip['id'] == self.snippet_id:
+                snippet.update(snip)
+        
+        self.title.value = snippet['title']
+        self.description.value = snippet['description']
+        tags = [Tag(self, 60, 26, tag['color'], tag['text'], True) for tag in snippet['tags']]
+        self.snippet_tags.content.controls = tags
+        self.code_editor.text_field.value = snippet['code']
+        self.code_editor.handle_on_change(None)
+
         self.update()
 
     def clear_controls(self):
-        self.tags_card.clear_tags()
         self.title.value = ""
         self.description.value = ""
-        self.code_editor.clear_control()
+        self.snippet_tags.content.controls.clear()
+        self.code_editor.text_field.value = ""
+        self.code_editor.text_field.prefix_text = "1 "
+        self.code_editor.update()
         self.update()
 
-    def get_control_data(self):
-        id = str(uuid4())
+    def save_snippet(self, e):
+        existing_data = self.route.config.read_snippets_data()
+
         title = self.title.value
         description = self.description.value
         tags = [{"text":tag.text, "color":tag.color} for tag in self.snippet_tags.content.controls]
         code = self.code_editor.text_field.value
-        
-        return id, title, description, tags, code
+        for snip in existing_data:
+            if snip['id'] == self.snippet_id:
+                snip['title'] = title
+                snip['description'] = description
+                snip['tags'] = tags
+                snip['code'] = code
 
-    def save_snippet(self, e):
-        existing_data = self.route.config.read_snippets_data()
-        
-        id, title, description, tags, code = self.get_control_data()
-
-        #save code to temp file
-        save_code_to_file(code)
-        #tokenize
-        tokens = tokenizer()
-        # delete file
-        delete_code_file()
-
-        data = {
-            'id': id,
-            'title': title,
-            'description': description,
-            'tags': tags,
-            'date': 'now',
-            'code': code,
-            'tokens': tokens
-        }
-        existing_data.append(data)
         self.route.config.save_snippets_data(existing_data)
-
         self.route.page.go('/home')
         self.route.page.update()
-
-    def go_home(self, e):
-        self.route.page.go('/home')
 
     def add_tag(self, tag):
         for _tag in self.snippet_tags.content.controls:
@@ -140,5 +121,6 @@ class NewSnippetView(ft.UserControl):
     def delete_tag(self, tag):
         self.snippet_tags.content.controls.remove(tag)
         self.update()
-    
 
+    def go_home(self, e):
+        self.route.page.go('/home')

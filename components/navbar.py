@@ -11,26 +11,26 @@ from . import (
 
 class NavBar(ft.UserControl):
 
-    def __init__(self, route, width, height):
+    def __init__(self, route):
         super().__init__()
         self.route = route
-        self.width = width
-        self.height = height
 
     def build(self):
         return ft.Container(
             bgcolor=NAVBAR_BACKGROUND,
             content=ft.Row(
-                width=self.width,
-                height=self.height,
+                height=70,
                 alignment=ft.MainAxisAlignment.SPACE_EVENLY,
                 spacing=50,
                 controls=[
-                    ft.Text(
-                        value="Code Snippet", 
-                        color=NAVBAR_LOGO,
-                        size=20,
-                        weight=ft.FontWeight.BOLD,
+                    ft.Container(
+                        on_click=self.go_home,
+                        content=ft.Text(
+                            value="Code Snippet", 
+                            color=NAVBAR_LOGO,
+                            size=20,
+                            weight=ft.FontWeight.BOLD,
+                        )
                     ),
                     ft.TextField(
                         width=600,
@@ -51,4 +51,7 @@ class NavBar(ft.UserControl):
     
     def go_newsnippet(self, e):
         self.route.page.go('/newsnippet')
+
+    def go_home(self, e):
+        self.route.page.go('/home')
     

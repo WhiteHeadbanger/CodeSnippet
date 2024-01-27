@@ -16,7 +16,7 @@ class Card(ft.UserControl):
         self.width = width
         self.height = height
         self.title_text = title
-        self.tags = [tag for tag in tags] if tags is not None else []
+        self.tags = tags if tags is not None else []
 
         self.title = ft.Text(
             value=self.title_text,
@@ -42,7 +42,7 @@ class Card(ft.UserControl):
         )
 
         for tag in self.tags:
-            self.container.content.controls[1].controls.append(tag)
+            self.tag_row.controls.append(tag)
         
         return self.container
     
@@ -59,8 +59,9 @@ class Card(ft.UserControl):
     
 class CodeCard(Card):
     
-    def __init__(self, route, width, height, title, date, description, tags = None, code = None):
+    def __init__(self, id, route, width, height, title, date, description, tags = None, code = None):
         super().__init__(route, width, height, title, tags)
+        self.id = id
         self.date_text = date
         self.description_text = description
         self.code = code
@@ -80,20 +81,50 @@ class CodeCard(Card):
             color=ft.colors.with_opacity(CARD_SNIPPET_DESCRIPTION_OPACITY, WHITE)
         )
 
+        self.edit_button = ft.IconButton(
+            icon=ft.icons.EDIT,
+            on_click=self.go_edit_snippet,
+            visible=False,
+            icon_size=17
+        )
+
+        self.delete_button = ft.IconButton(
+            icon=ft.icons.DELETE,
+            on_click=self.go_delete_snippet,
+            visible=False,
+            icon_size=17,
+            icon_color=ft.colors.RED_ACCENT
+        )
+
     def build(self):
         self.container = super().build()
         self.container.scale = ft.transform.Scale(1)
-        self.container.animate_scale=ft.animation.Animation(600, ft.AnimationCurve.BOUNCE_OUT)
-        #self.container.on_click = lambda e: self.handle_click(e)
-        self.container.on_hover = lambda e: self.handle_hover(e)
+        self.container.animate_scale=ft.animation.Animation(600, ft.AnimationCurve.EASE)
+        self.container.on_click = self.handle_click
+        self.container.on_hover = self.handle_hover
 
+        self.container.content.controls.remove(self.title)
+        self.container.content.controls.insert(0, (ft.Row(
+            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+            controls=[
+                self.title,
+                ft.Row(
+                    spacing=10,
+                    controls=[
+                        self.edit_button, 
+                        self.delete_button
+                    ]
+                ) 
+            ]
+        )))
         self.container.content.controls.append(self.date)
         self.container.content.controls.append(self.description)
-        
+
         return self.container
     
     def handle_click(self, e):
-        e.page.go('/snippet')
+        self.route.snippet.snippet_id = self.id
+        self.route.page.go('/snippet')
 
     def handle_hover(self, e):
         if not self.hovered:
@@ -108,23 +139,35 @@ class CodeCard(Card):
     
     def animate_hovered(self):
         self.container.scale = 1.1
+        self.edit_button.visible = True
+        self.delete_button.visible = True
     
     def animate_unhovered(self):
         self.container.scale = 1
+        self.edit_button.visible = False
+        self.delete_button.visible = False
+
+    def go_edit_snippet(self, e):
+        self.route.edit_snippet.snippet_id = self.id
+        self.route.page.go('/editsnippet')
+
+    def go_delete_snippet(self, e):
+        self.route.home.open_dialog(self)
+        
     
 class TagCard(Card):
 
     def __init__(self, route, width, height, title, tags = None):
         super().__init__(route, width, height, title, tags)
 
-    def build(self):
-        self.container = super().build()
-
-        new_tag_button = ft.TextButton(
+        self.new_tag_button = ft.TextButton(
             text="New tag",
             on_click=self.go_newtag
         )
-        self.container.content.controls.append(new_tag_button)
+
+    def build(self):
+        self.container = super().build()
+        self.container.content.controls.append(self.new_tag_button)
         return self.container
 
     def go_newtag(self, e):
