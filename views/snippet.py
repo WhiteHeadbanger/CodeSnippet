@@ -33,7 +33,7 @@ class SnippetView(ft.UserControl):
 
     def build(self):
         self.content = ft.Container(
-            margin=ft.margin.only(top=100, left=270),
+            margin=ft.margin.only(top=100, left=100),
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             padding=10,
             width=700,

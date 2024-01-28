@@ -1,7 +1,7 @@
 import flet as ft
 
-from components import TAG_PURPLE
 from components import Tag, CodeCard, TagCard
+from constants import TAG_WIDTH, TAG_HEIGHT
 
 class HomeView(ft.UserControl):
 
@@ -9,7 +9,7 @@ class HomeView(ft.UserControl):
         super().__init__()
         self.route = route
         
-        self.tag_card = TagCard(self.route, 300, 500, "Filter by tags")
+        self.tag_card = TagCard(self.route, width=300, title="Filter by tags")
         self.card_grid = ft.GridView(
             runs_count=3,
             max_extent=300,
@@ -68,14 +68,14 @@ class HomeView(ft.UserControl):
         #TODO use pydantic to create a snippet object from json
         snippets_data = self.route.config.read_snippets_data()
         for snip in snippets_data:
-            tags = [Tag(self, 60, 26, tag['color'], tag['text']) for tag in snip['tags']]
+            tags = [Tag(self, TAG_WIDTH, TAG_HEIGHT, tag['color'], tag['text']) for tag in snip['tags']]
 
             self.card_grid.controls.append(CodeCard(snip['id'], self.route, 300, 300, snip['title'], snip['date'], snip['description'], tags, snip['code']))
     
     def load_tags(self):
         tags_data = self.route.config.read_tags_data()
         for tag in tags_data:
-            self.tag_card.add_tag(Tag(self, 60, 26, tag.color, tag.text))
+            self.tag_card.add_tag(Tag(self, TAG_WIDTH, TAG_HEIGHT, tag.color, tag.text))
 
     
     def delete_snippet(self, e):

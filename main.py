@@ -1,5 +1,5 @@
 import flet as ft
-from constants import BODY_OPACITY, WHITE
+from constants import BODY_OPACITY, WHITE, WINDOW_WIDTH, WINDOW_HEIGHT
 
 from app import App
 
@@ -13,8 +13,8 @@ if __name__ == '__main__':
     def main(page: ft.Page):
         page.title = "Code Snippet"
         page.window_resizable = False
-        page.window_width = 1920
-        page.window_height = 1080
+        page.window_width = WINDOW_WIDTH
+        page.window_height = WINDOW_HEIGHT
         page.padding = 0
         page.bgcolor = ft.colors.with_opacity(BODY_OPACITY, WHITE)
         page.scroll = "auto"

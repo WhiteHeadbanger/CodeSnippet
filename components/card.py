@@ -25,7 +25,7 @@ class Card(ft.UserControl):
             color=ft.colors.with_opacity(CARD_SNIPPET_TITLE_OPACITY, WHITE)
         )
 
-        self.tag_row = ft.Row(wrap=True)
+        self.tag_row = ft.Row(wrap=True, tight=True)
     
     def build(self):
         self.container = ft.Container(
@@ -37,8 +37,10 @@ class Card(ft.UserControl):
                 controls=[
                     self.title,
                     self.tag_row
-                ]
-            )
+                ],
+                expand=True
+            ),
+            
         )
 
         for tag in self.tags:
@@ -157,7 +159,7 @@ class CodeCard(Card):
     
 class TagCard(Card):
 
-    def __init__(self, route, width, height, title, tags = None):
+    def __init__(self, route, width=None, height=None, title=None, tags = None):
         super().__init__(route, width, height, title, tags)
 
         self.new_tag_button = ft.TextButton(

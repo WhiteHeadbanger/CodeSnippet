@@ -12,7 +12,7 @@ class NewSnippetView(ft.UserControl):
         self.route = route
 
         self.code_editor = CodeEditor(self)
-        self.tags_card = TagCard(self, 300, 500, "Your tags")
+        self.tags_card = TagCard(self, width=300, title="Your tags")
         self.tags_card.new_tag_button.visible = False
         self.snippet_tags = ft.Container(
             content=ft.Row(),
@@ -59,11 +59,16 @@ class NewSnippetView(ft.UserControl):
                             ft.Row(
                                 vertical_alignment=ft.CrossAxisAlignment.START,
                                 controls=[
-                                    self.tags_card, 
-                                    ft.IconButton(icon=ft.icons.CLOSE, on_click=self.go_home)
+                                    self.tags_card 
                                 ], 
                             ),
-                            ft.TextButton(text="Save", on_click=self.save_snippet),
+                            ft.Row(
+                                vertical_alignment=ft.CrossAxisAlignment.START,
+                                controls=[
+                                    ft.TextButton(text="Save", on_click=self.save_snippet),
+                                    ft.TextButton(text="Close", on_click=self.go_home)
+                                ]
+                            )
                         ]
                     ),
                     
