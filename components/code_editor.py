@@ -51,4 +51,5 @@ class CodeEditor(ft.UserControl):
 
     def clear_control(self):
         self.text_field.value = ""
+        self.text_field.prefix_text = "1 "
         self.update()

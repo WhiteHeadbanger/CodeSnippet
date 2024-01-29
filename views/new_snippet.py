@@ -131,6 +131,8 @@ class NewSnippetView(ft.UserControl):
         self.route.page.update()
 
     def go_home(self, e):
+        # clear controls and go home
+        self.clear_controls()
         self.route.page.go('/home')
 
     def add_tag(self, tag):
@@ -146,5 +148,11 @@ class NewSnippetView(ft.UserControl):
     def delete_tag(self, tag):
         self.snippet_tags.content.controls.remove(tag)
         self.update()
+
+    def clear_controls(self):
+        self.title.value = ""
+        self.description.value = ""
+        self.snippet_tags.content.controls.clear()
+        self.code_editor.clear_control()
     
 
