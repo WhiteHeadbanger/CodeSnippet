@@ -13,14 +13,17 @@ class CodeEditor(ft.UserControl):
         self.text_field = ft.TextField(
             hint_text="Your code...",
             width=700,
+            height=200,
             bgcolor=ft.colors.with_opacity(CARD_SNIPPET_OPACITY, WHITE),
             color=WHITE,
             multiline=True,
             dense=False,
-            on_change=self.handle_on_change,
+            on_change=self.handle_change,
             prefix_text="1 ",
             content_padding=5,
-            focused_border_color=ft.colors.TRANSPARENT
+            focused_border_color=ft.colors.TRANSPARENT,
+            expand=True,
+            max_lines=None
         )
 
         self.text_row = ft.Row(controls=[self.text_field])
@@ -32,7 +35,7 @@ class CodeEditor(ft.UserControl):
 
         return self.container
 
-    def handle_on_change(self, e):
+    def handle_change(self, e):
         ## Handle new lines
         count_new_lines = self.text_field.value.count("\n")
         
