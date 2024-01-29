@@ -91,6 +91,7 @@ class NewSnippetView(ft.UserControl):
         self.tags_card.clear_tags()
         self.title.value = ""
         self.description.value = ""
+        self.snippet_tags.content.controls.clear()
         self.code_editor.clear_control()
         self.update()
 
@@ -148,11 +149,5 @@ class NewSnippetView(ft.UserControl):
     def delete_tag(self, tag):
         self.snippet_tags.content.controls.remove(tag)
         self.update()
-
-    def clear_controls(self):
-        self.title.value = ""
-        self.description.value = ""
-        self.snippet_tags.content.controls.clear()
-        self.code_editor.clear_control()
     
 
