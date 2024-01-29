@@ -19,7 +19,6 @@ class CodeEditor(ft.UserControl):
             multiline=True,
             dense=False,
             on_change=self.handle_change,
-            prefix_text="1 ",
             content_padding=5,
             focused_border_color=ft.colors.TRANSPARENT,
             expand=True,
