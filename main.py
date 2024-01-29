@@ -17,7 +17,7 @@ if __name__ == '__main__':
         page.window_height = WINDOW_HEIGHT
         page.padding = 0
         page.bgcolor = ft.colors.with_opacity(BODY_OPACITY, WHITE)
-        page.scroll = "auto"
+        page.scroll = "hidden"
 
         _app = App(page)
         page.on_route_change = _app.route_change
