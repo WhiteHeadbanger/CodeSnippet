@@ -40,17 +40,20 @@ class SnippetView(ft.UserControl):
             content=ft.Column(
                 spacing=10,
                 controls=[
-                    ft.Row(
-                        wrap=True,
-                        controls=[
-                            self.title,
-                            self.copy_code_button
-                        ],
-                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN
-                    ),
+                    self.title,
                     self.description,
                     self.tags,
-                    self.code_area
+                    ft.Stack(
+                        controls=[
+                            self.code_area,
+                            ft.Container(
+                                content=self.copy_code_button,
+                                alignment=ft.alignment.top_right
+
+                            )
+                        ],
+
+                    )
                 ]
             )
         )
@@ -79,15 +82,20 @@ class SnippetView(ft.UserControl):
         line_number = 1
         self.code_area.content.controls.append(ft.Row())
         self.code_area.content.controls[0].controls.append(ft.Text())
+        self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=f"{line_number}    "))
         
         text_start = True  # Initialize text_start to True
         
         for token in tokens:
+            #style = ft.TextStyle(color=COLORS.get(token[0], None))
+            #spans = self.code_area.content.controls[row_counter].controls[0].spans
+
             if token[0] in ['NEWLINE', 'NL']:
                 row_counter += 1
                 line_number += 1
                 self.code_area.content.controls.append(ft.Row())
                 self.code_area.content.controls[row_counter].controls.append(ft.Text())
+                self.code_area.content.controls[row_counter].controls[0].spans.append(ft.TextSpan(text=f"{line_number}    "))
                 text_start = True  # Reset text_start on newline
                 continue
 
@@ -109,7 +117,7 @@ class SnippetView(ft.UserControl):
             
             if text_start:
                 text = f"{' ' * indent}{text}"
-                text_start = False  # Set text_start to False after appending the first character
+                text_start = False  # Set text_start to False after appending the first token
             
             spans.append(ft.TextSpan(text=text, style=style))
 
