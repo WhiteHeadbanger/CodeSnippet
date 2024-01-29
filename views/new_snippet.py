@@ -4,6 +4,7 @@ from syntax_highlight.lexers.python import tokenizer
 from components import TagCard, CodeEditor, Tag
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY
 from uuid import uuid4
+from constants import TAG_WIDTH, TAG_HEIGHT
 
 class NewSnippetView(ft.UserControl):
     
@@ -81,7 +82,7 @@ class NewSnippetView(ft.UserControl):
     def initialize(self):
         self.clear_controls()
         for tag in self.route.home.tag_card.get_tags():
-            t = Tag(self, 60, 26, tag.color, tag.text, False)
+            t = Tag(self, TAG_WIDTH, TAG_HEIGHT, tag.color, tag.text, False)
             self.tags_card.add_tag(t)
         
         self.update()
@@ -138,7 +139,7 @@ class NewSnippetView(ft.UserControl):
                 self.delete_tag(_tag)
                 return
         
-        t = Tag(self, 60, 26, tag.color, tag.text, True)
+        t = Tag(self, TAG_WIDTH, TAG_HEIGHT, tag.color, tag.text, True)
         self.snippet_tags.content.controls.append(t)
         self.update()
 
