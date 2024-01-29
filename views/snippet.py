@@ -52,7 +52,6 @@ class SnippetView(ft.UserControl):
 
                             )
                         ],
-
                     )
                 ]
             )
