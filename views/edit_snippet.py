@@ -9,7 +9,7 @@ class EditSnippetView(ft.UserControl):
         self.route = route
         self.snippet_id = None
 
-        self.code_editor = CodeEditor(self.route)
+        self.code_editor = CodeEditor()
         self.tags_card = TagCard(self.route, 300, 500, "Your tags")
         self.snippet_tags = ft.Container(
             content=ft.Row(),
@@ -77,7 +77,7 @@ class EditSnippetView(ft.UserControl):
         tags = [Tag(self, 60, 26, tag['color'], tag['text'], True) for tag in snippet['tags']]
         self.snippet_tags.content.controls = tags
         self.code_editor.text_field.value = snippet['code']
-        self.code_editor.handle_on_change(None)
+        self.code_editor.handle_change(None)
 
         self.update()
 

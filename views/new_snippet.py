@@ -12,24 +12,21 @@ class NewSnippetView(ft.UserControl):
         super().__init__()
         self.route = route
 
-        self.code_editor = CodeEditor(self)
+        self.code_editor = CodeEditor()
         self.tags_card = TagCard(self, width=300, title="Your tags")
         self.tags_card.new_tag_button.visible = False
         self.snippet_tags = ft.Container(
             content=ft.Row(),
-            bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
+            #bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             height=30,
-            width=700,
         )
         self.title = ft.TextField(
-            width=700,
             hint_text="Title",
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
             focused_border_color=ft.colors.TRANSPARENT
         )
         self.description = ft.TextField(
-            width=700,
             hint_text="Description",
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
             color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
@@ -49,10 +46,10 @@ class NewSnippetView(ft.UserControl):
                         controls=[
                             self.title,
                             self.description,
-                            ft.Text("Selected tags:"),
+                            ft.Text("Tags:"),
                             self.snippet_tags,
                             self.code_editor
-                        ]
+                        ],
                     ),
                     ft.Column(
                         col=2,
