@@ -1,5 +1,5 @@
 import flet as ft
-from components import CodeEditor, Tag
+from components import Tag
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE
 from syntax_highlight.colors import COLORS
 
@@ -66,7 +66,11 @@ class SnippetView(ft.UserControl):
         
         self.title.value = snippet_data.get('title', None)
         self.description.value = snippet_data.get('description', None)
-        tags = [Tag(self, 60, 26, tag.get('color', None), tag.get('text', None)) for tag in snippet_data.get('tags', None)]
+        tags = [Tag(self, tag.get('text', None)) for tag in snippet_data.get('tags', None)]
+        #deactivate on hover and on click
+        for tag in tags:
+            tag.content.on_hover = None
+            tag.content.on_click = None
         self.tags.content.controls = tags
         tokens = snippet_data.get('tokens', None)
         

@@ -1,25 +1,16 @@
 import flet as ft
 from syntax_highlight.utils import save_code_to_file, delete_code_file
 from syntax_highlight.lexers.python import tokenizer
-from components import TagCard, CodeEditor, Tag
+from components import CodeEditor, Tag
 from components import NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE, NAVBAR_SEARCH_TEXT_OPACITY
 from uuid import uuid4
-from constants import TAG_WIDTH, TAG_HEIGHT
 
 class NewSnippetView(ft.UserControl):
     
     def __init__(self, route):
         super().__init__()
         self.route = route
-
-        self.code_editor = CodeEditor()
-        self.tags_card = TagCard(self, width=300, title="Your tags")
-        self.tags_card.new_tag_button.visible = False
-        self.snippet_tags = ft.Container(
-            content=ft.Row(),
-            #bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
-            height=30,
-        )
+        
         self.title = ft.TextField(
             hint_text="Title",
             bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
@@ -32,6 +23,19 @@ class NewSnippetView(ft.UserControl):
             color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
             focused_border_color=ft.colors.TRANSPARENT
         )
+        self.tags_text_field = ft.TextField(
+            hint_text="Tags",
+            bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
+            color=ft.colors.with_opacity(NAVBAR_SEARCH_TEXT_OPACITY, WHITE),
+            focused_border_color=ft.colors.TRANSPARENT,
+            on_submit=self.add_tag,
+        )
+        self.snippet_tags = ft.Container(
+            content=ft.Row(wrap=True, run_spacing=10),
+            bgcolor=ft.colors.with_opacity(NAVBAR_SEARCH_OVERLAY_OPACITY, WHITE),
+            height=26
+        )
+        self.code_editor = CodeEditor()
 
 
     def build(self):
@@ -46,7 +50,7 @@ class NewSnippetView(ft.UserControl):
                         controls=[
                             self.title,
                             self.description,
-                            ft.Text("Tags:"),
+                            self.tags_text_field,
                             self.snippet_tags,
                             self.code_editor
                         ],
@@ -54,12 +58,6 @@ class NewSnippetView(ft.UserControl):
                     ft.Column(
                         col=2,
                         controls=[
-                            ft.Row(
-                                vertical_alignment=ft.CrossAxisAlignment.START,
-                                controls=[
-                                    self.tags_card 
-                                ], 
-                            ),
                             ft.Row(
                                 vertical_alignment=ft.CrossAxisAlignment.START,
                                 controls=[
@@ -78,16 +76,12 @@ class NewSnippetView(ft.UserControl):
     
     def initialize(self):
         self.clear_controls()
-        for tag in self.route.home.tag_card.get_tags():
-            t = Tag(self, TAG_WIDTH, TAG_HEIGHT, tag.color, tag.text, False)
-            self.tags_card.add_tag(t)
-        
         self.update()
 
     def clear_controls(self):
-        self.tags_card.clear_tags()
         self.title.value = ""
         self.description.value = ""
+        self.tags_text_field.value = ""
         self.snippet_tags.content.controls.clear()
         self.code_editor.clear_control()
         self.update()
@@ -96,7 +90,7 @@ class NewSnippetView(ft.UserControl):
         id = str(uuid4())
         title = self.title.value
         description = self.description.value
-        tags = [{"text":tag.text, "color":tag.color} for tag in self.snippet_tags.content.controls]
+        tags = [{"text":tag.text} for tag in self.snippet_tags.content.controls]
         code = self.code_editor.text_field.value
         
         return id, title, description, tags, code
@@ -133,14 +127,23 @@ class NewSnippetView(ft.UserControl):
         self.clear_controls()
         self.route.page.go('/home')
 
-    def add_tag(self, tag):
-        for _tag in self.snippet_tags.content.controls:
-            if _tag.color == tag.color and _tag.text == tag.text:
-                self.delete_tag(_tag)
-                return
+    def add_tag(self, e):
+        new_tag_text = self.tags_text_field.value
         
-        t = Tag(self, TAG_WIDTH, TAG_HEIGHT, tag.color, tag.text, True)
-        self.snippet_tags.content.controls.append(t)
+        # Validations
+        if new_tag_text == "":
+            return
+        elif new_tag_text in [tag.text for tag in self.snippet_tags.content.controls]:
+            return
+        else:
+            # Create new tag and add it to the snippet tags
+            new_tag = Tag(self, new_tag_text)
+            self.snippet_tags.content.controls.append(new_tag)
+
+        # Clear text field and focus it
+        self.tags_text_field.value = ""
+        self.tags_text_field.focus()
+
         self.update()
 
     def delete_tag(self, tag):

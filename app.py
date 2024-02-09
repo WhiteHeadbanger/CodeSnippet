@@ -1,6 +1,6 @@
 import flet as ft
 from components import NavBar
-from views import HomeView, NewTagView, NewSnippetView, SnippetView, EditSnippetView
+from views import HomeView, NewSnippetView, SnippetView, EditSnippetView
 from config import Config
 
 class App:
@@ -13,7 +13,6 @@ class App:
 
         # Instances of views. Passing self as a parameter to facilitate communication between all views
         self.home = HomeView(self)
-        self.new_tag = NewTagView(self)
         self.new_snippet = NewSnippetView(self)
         self.snippet = SnippetView(self)
         self.edit_snippet = EditSnippetView(self)
@@ -24,7 +23,6 @@ class App:
         # Creates dict of routes
         self.routes = {
             '/home': self.home,
-            '/newtag': self.new_tag,
             '/newsnippet': self.new_snippet,
             '/snippet': self.snippet,
             '/editsnippet': self.edit_snippet,
@@ -34,7 +32,6 @@ class App:
         # Creates dict of methods to initialize the views
         self.calls = {
             '/home': self.home.initialize,
-            '/newtag': self.new_tag.initialize,
             '/newsnippet': self.new_snippet.initialize,
             '/snippet': self.snippet.initialize,
             '/editsnippet': self.edit_snippet.initialize
@@ -43,7 +40,6 @@ class App:
         # App body
         self.container = ft.Container(content=self.routes['/home'], alignment=ft.alignment.center)
         self.body = ft.Column(
-            #horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             expand=True,
             controls=[
                 self.navbar,

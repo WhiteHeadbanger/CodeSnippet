@@ -25,7 +25,7 @@ class Config:
         with open(self.tags_dir, "r") as file:
             data = json.load(file)
 
-        tags = [TagDataclass(id = tag['id'], color = tag['color'], text = tag['text']) for tag in data]
+        tags = [TagDataclass(id = tag['id'], text = tag['text']) for tag in data]
         
         return tags
     
@@ -35,7 +35,6 @@ class Config:
             file.seek(0)
             data = {
                 'id': tag.id,
-                'color': tag.color,
                 'text': tag.text
             }
 

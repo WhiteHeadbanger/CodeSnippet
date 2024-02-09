@@ -35,7 +35,12 @@ class Card(ft.UserControl):
             padding=10,
             content=ft.Column(
                 controls=[
-                    self.title,
+                    ft.Row(
+                        controls=[
+                            self.title
+                        ],
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN
+                    ),
                     self.tag_row
                 ],
                 expand=True
@@ -105,11 +110,9 @@ class CodeCard(Card):
         self.container.on_click = self.handle_click
         self.container.on_hover = self.handle_hover
 
-        self.container.content.controls.remove(self.title)
-        self.container.content.controls.insert(0, (ft.Row(
+        self.container.content.controls[0].controls.append(ft.Row(
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             controls=[
-                self.title,
                 ft.Row(
                     spacing=10,
                     controls=[
@@ -118,7 +121,8 @@ class CodeCard(Card):
                     ]
                 ) 
             ]
-        )))
+        ))
+        
         self.container.content.controls.append(self.date)
         self.container.content.controls.append(self.description)
 
@@ -162,15 +166,39 @@ class TagCard(Card):
     def __init__(self, route, width=None, height=None, title=None, tags = None):
         super().__init__(route, width, height, title, tags)
 
-        self.new_tag_button = ft.TextButton(
-            text="New tag",
-            on_click=self.go_newtag
+        self.new_tag_btn = ft.IconButton(
+            icon=ft.icons.ADD,
+            on_click=self.go_new_tag,
+            icon_size=17
+        )
+
+        self.select_tag_btn = ft.IconButton(
+            icon=ft.icons.CHECK_BOX_OUTLINE_BLANK,
+            on_click=self.select_tag,
+            icon_size=17
+        )
+
+        self.delete_tag_btn = ft.IconButton(
+            icon=ft.icons.DELETE,
+            on_click=self.delete_tag,
+            icon_size=17,
+            icon_color=ft.colors.RED_ACCENT,
+            visible=True
         )
 
     def build(self):
         self.container = super().build()
-        self.container.content.controls.append(self.new_tag_button)
+        self.container.content.controls[0].controls.append(self.new_tag_btn)
+        self.container.content.controls[0].controls.append(self.select_tag_btn)
+        self.container.content.controls[0].controls.append(self.delete_tag_btn)
+        
         return self.container
 
-    def go_newtag(self, e):
+    def go_new_tag(self, e):
         self.route.page.go('/newtag')
+
+    def select_tag(self, e):
+        pass
+
+    def delete_tag(self, e):
+        pass

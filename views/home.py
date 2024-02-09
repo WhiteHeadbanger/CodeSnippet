@@ -1,7 +1,6 @@
 import flet as ft
 
-from components import Tag, CodeCard, TagCard
-from constants import TAG_WIDTH, TAG_HEIGHT
+from components import Tag, CodeCard
 
 class HomeView(ft.UserControl):
 
@@ -9,7 +8,6 @@ class HomeView(ft.UserControl):
         super().__init__()
         self.route = route
         
-        self.tag_card = TagCard(self.route, width=300, title="Filter by tags")
         self.card_grid = ft.GridView(
             runs_count=3,
             max_extent=300,
@@ -29,10 +27,6 @@ class HomeView(ft.UserControl):
                         col=6,
                         controls=[self.card_grid]
                     ),
-                    ft.Column(
-                        col=2,
-                        controls=[self.tag_card]
-                    )
                 ]
             )
         )
@@ -59,23 +53,22 @@ class HomeView(ft.UserControl):
 
     def initialize(self):
         self.card_grid.controls.clear()
-        self.tag_card.clear_tags()
         self.cards_grid()
-        self.load_tags()
         self.update()
         
     def cards_grid(self):
         #TODO use pydantic to create a snippet object from json
         snippets_data = self.route.config.read_snippets_data()
         for snip in snippets_data:
-            tags = [Tag(self, TAG_WIDTH, TAG_HEIGHT, tag['color'], tag['text']) for tag in snip['tags']]
+            # Get max 3 elements from tags list
+            tags = [Tag(self, tag['text']) for tag in snip['tags'][:3]]
+            
+            #deactivate on hover and on click
+            for tag in tags:
+                tag.content.on_hover = None
+                tag.content.on_click = None
 
             self.card_grid.controls.append(CodeCard(snip['id'], self.route, 300, 300, snip['title'], snip['date'], snip['description'], tags, snip['code']))
-    
-    def load_tags(self):
-        tags_data = self.route.config.read_tags_data()
-        for tag in tags_data:
-            self.tag_card.add_tag(Tag(self, TAG_WIDTH, TAG_HEIGHT, tag.color, tag.text))
 
     
     def delete_snippet(self, e):
@@ -99,7 +92,7 @@ class HomeView(ft.UserControl):
         self.route.config.save_snippets_data(snippets_data)
         
         # Remove card from card grid
-        self.card_grid.controls.remove(card)
+        #self.card_grid.controls.remove(card)
         self.update()
 
     
