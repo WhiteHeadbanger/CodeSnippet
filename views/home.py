@@ -92,7 +92,7 @@ class HomeView(ft.UserControl):
         self.route.config.save_snippets_data(snippets_data)
         
         # Remove card from card grid
-        #self.card_grid.controls.remove(card)
+        self.card_grid.controls.remove(card)
         self.update()
 
     
