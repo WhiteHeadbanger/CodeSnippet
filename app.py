@@ -1,21 +1,25 @@
 import flet as ft
 from components import NavBar
-from views import HomeView, NewSnippetView, SnippetView, EditSnippetView
+from views import HomeView, NewSnippetView, SnippetView, EditSnippetView, AuthView
 from config import Config
+from auth import Session
 
 class App:
 
     def __init__(self, page: ft.Page):
         self.page = page
 
+        self.session = Session()
+
         # Creates the navbar
-        self.navbar = NavBar(self)
+        self.navbar = NavBar(self, self.session)
 
         # Instances of views. Passing self as a parameter to facilitate communication between all views
         self.home = HomeView(self)
         self.new_snippet = NewSnippetView(self)
         self.snippet = SnippetView(self)
         self.edit_snippet = EditSnippetView(self)
+        self.auth = AuthView(self)
         
         # Instance of Config
         self.config = Config(self)
@@ -26,7 +30,7 @@ class App:
             '/newsnippet': self.new_snippet,
             '/snippet': self.snippet,
             '/editsnippet': self.edit_snippet,
-
+            '/auth': self.auth,
         }
 
         # Creates dict of methods to initialize the views
@@ -34,7 +38,8 @@ class App:
             '/home': self.home.initialize,
             '/newsnippet': self.new_snippet.initialize,
             '/snippet': self.snippet.initialize,
-            '/editsnippet': self.edit_snippet.initialize
+            '/editsnippet': self.edit_snippet.initialize,
+            '/auth': self.auth.initialize,
         }
 
         # App body

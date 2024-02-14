@@ -8,6 +8,7 @@ class Config:
 
         self.snippets_dir = './data/snippets.json'
         self.tags_dir = './data/tags.json'
+        self.users_dir = './data/users.json'
 
     def read_snippets_data(self, id = None):
         with open(self.snippets_dir, "r") as file:
@@ -38,5 +39,25 @@ class Config:
                 'text': tag.text
             }
 
+            file_data.append(data)
+            json.dump(file_data, file)
+
+    def get_user_data(self, username):
+        with open(self.users_dir, "r") as file:
+            data = json.load(file)
+
+        data = next((user for user in data if user['username'] == username), None)
+        return data
+    
+    def save_user_data(self, user):
+        with open(self.users_dir, "r+") as file:
+            file_data = json.load(file)
+            file.seek(0)
+            data = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'password': user.password
+            }
             file_data.append(data)
             json.dump(file_data, file)
